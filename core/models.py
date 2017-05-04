@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 class Utilizador(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -56,4 +57,24 @@ class Aposta(models.Model):
     e2 = models.CharField(max_length=2)
 
     def __str__(self):
-        return self.id	
+        return self.id
+
+class Sorteio(models.Model):
+    nSorteio=models.PositiveSmallIntegerField(primary_key=True)
+    dataSorteio=models.DateField(auto_now=False, auto_now_add=False)
+    bola1 =models.PositiveSmallIntegerField()
+    bola2 =models.PositiveSmallIntegerField()
+    bola3 =models.PositiveSmallIntegerField()
+    bola4 =models.PositiveSmallIntegerField()
+    bola5 =models.PositiveSmallIntegerField()
+    estrela1 =models.PositiveSmallIntegerField()
+    estrela2 =models.PositiveSmallIntegerField()
+
+#V2
+class Estrelas(models.Model):
+    estrela = models.PositiveSmallIntegerField(primary_key=False)
+    ocorrencias = models.DateField(auto_now=False, auto_now_add=False)
+
+class Bolas(models.Model):
+    bola = models.PositiveSmallIntegerField(primary_key=False)
+    ocorrencias = models.DateField(auto_now=False, auto_now_add=False)    

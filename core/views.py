@@ -1,16 +1,22 @@
+import os
 from django.shortcuts import render, get_object_or_404, HttpResponse, HttpResponseRedirect, redirect
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from django.utils.datastructures import MultiValueDictKeyError
-from .models import Utilizador, Concurso, Aposta, Conta
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
+from django.views.decorators.csrf import csrf_exempt
+from datetime import datetime
+from django.core.exceptions import ObjectDoesNotExist
+from .models import Utilizador, Concurso, Aposta, Conta, Sorteio, Bolas, Estrelas
+
 
 def inicio(request):
     return render(request, 'core/inicio.html')
@@ -161,9 +167,6 @@ def areapessoal(request):
 def mostrardados(request):
     return render(request, 'core/mostrardados.html')
 
-def carregarsaldo(request):
-    return render(request, 'core/carregarsaldo.html')
-		
 def aposta(request):
     apostas = Aposta.objects.all()
     template = loader.get_template('core/index.html')
@@ -189,29 +192,252 @@ def gravaAposta(request,concurso_id):
 def editardados(request):
     return render(request, 'core/editardados.html')
 
-'''
 def editRegisto(request):
-    return render(request, 'core/inicio.html')
-
-
-def editRegisto(request):
-    fuser = User.objects.get(pk = 1)
-
-    fuser.localidade = 'Viseu'
-    fuser.save()
-
-    return render(request, 'core/inicio.html')
-'''
-
-def editRegisto(request):
-    fuser = User.objects.get(username='rfred')
     if request.user.is_authenticated:
-        fuser = Utilizador(user=fuser)
-        if request.POST['sloc']:
-            fuser.localidade = request.POST['sloc']
-        fuser.save()
-        return HttpResponseRedirect(reverse('core:areapessoal'))
+        usr = get_object_or_404(Utilizador, user=request.user.id)
+        try:
+            if request.POST['snome']:
+                request.user.first_name = request.POST['snome']
+            if request.POST['sapelido']:
+                request.user.last_name = request.POST['sapelido']
+            if request.POST['semail']:
+                request.user.email = request.POST['semail']
+                request.user.save()
+            if request.POST['snif']:
+                usr.NIF = request.POST['snif']
+            if request.POST['scontacto']:
+                usr.contacto = request.POST['scontacto']
+            if request.POST['scodpostal']:
+                usr.codigopostal = request.POST['scodpostal']
+            if request.POST['smorada']:
+                usr.morada = request.POST['smorada']
+            if request.POST['sloc']:
+                usr.localidade = request.POST['sloc']
+            if request.POST['spais']:
+                usr.pais = request.POST['spais']
+            usr.save()
+            #context = {}
+            #context['acc'] = acc
+            return HttpResponseRedirect(reverse('core:editardados'))
+        except MultiValueDictKeyError:
+            #context = {}
+            #context['acc'] = acc
+            return HttpResponseRedirect(reverse('core:areapessoal'))
+    else:
+        return HttpResponse("Desculpe. Alguma coisa não funcionou!")
+
+@login_required
+def carregarsaldo(request):
+    return render(request, 'core/carregarsaldo.html')
+
+def carregaS(request):
+    return render(request, 'core/carregarsaldo.html')
+
+
+def apostar(request):
+    teste = get_object_or_404(Bolas, pk=31)
+    return render(request, 'core/apostar.html', {'lista':teste})
+
+@csrf_exempt
+def sugestoes(request):
+    listaSugestoes={}
+    bolasEscolhidas = {}
+    datas=[]
+    if request.POST:
+    #se não for na abertura da página (ou refresh)
+        nvazio=set()
+        if request.POST['eb1'] is not '':
+            bolasEscolhidas['eb1']=int(request.POST['eb1'])
+            nvazio.add('eb1')
+        if request.POST['eb2'] is not '':
+            bolasEscolhidas['eb2']=int(request.POST['eb2'])
+            nvazio.add('eb2')
+        if request.POST['eb3'] is not '':
+            bolasEscolhidas['eb3']=int(request.POST['eb3'])
+            nvazio.add('eb3')
+        if request.POST['eb4'] is not '':
+            bolasEscolhidas['eb4']=int(request.POST['eb4'])
+            nvazio.add('eb4')
+        if request.POST['eb5'] is not '':
+            bolasEscolhidas['eb5']=int(request.POST['eb5'])
+            nvazio.add('eb5')
+
+        #obter sugestões
+        size=len(bolasEscolhidas)
+        if size==1:#obter duetos
+            b1=bolasEscolhidas.get(nvazio.pop())
+            s1=Bolas.objects.filter(bola=b1)
+            for s in s1:
+                d1=s.ocorrencias
+                tmp=(Bolas.objects.filter(ocorrencias=d1).exclude(bola=s.bola).values('bola').annotate(vezes=Count('ocorrencias')))
+
+                for t in tmp:
+                    if t.get('bola') in listaSugestoes:
+                        listaSugestoes[t.get('bola')]+= 1
+                    else:
+                        listaSugestoes[t.get('bola')]=1 #t.get('vezes')
+
+ #  Fim de sugestões para Duetos
+        if size == 2:  # obter trios
+
+            b1 = bolasEscolhidas.get(nvazio.pop())
+            b2 = bolasEscolhidas.get(nvazio.pop())
+            s1 = Bolas.objects.filter(bola=b1)
+
+
+            for s in s1:
+                d1 = s.ocorrencias
+                s2= (Bolas.objects.filter(ocorrencias=d1).filter(bola=b2))
+                for j in s2:
+                    d2=j.ocorrencias
+                    tmp=Bolas.objects.filter(ocorrencias=d2).values('bola').exclude(bola=b2).exclude(bola=b1)
+                    for t in tmp:
+                        if t.get('bola') in listaSugestoes:
+                            listaSugestoes[t.get('bola')]+= 1
+                        else:
+                            listaSugestoes[t.get('bola')]=1
+
+#Fim de sugestões para Trios
+        if size == 3:  # obter Quartetos
+
+            b1 = bolasEscolhidas.get(nvazio.pop())
+            b2 = bolasEscolhidas.get(nvazio.pop())
+            b3 = bolasEscolhidas.get(nvazio.pop())
+            q1 = (Bolas.objects.filter(bola=b1))
+
+            for r1 in q1:
+                d1 = r1.ocorrencias
+                q2 = (Bolas.objects.filter(ocorrencias=d1).filter(bola=b2))
+                for r2 in q2:
+                    d2 = r2.ocorrencias
+                    q3 = (Bolas.objects.filter(ocorrencias=d2).filter(bola=b3))
+                    for r3 in q3: #q3 contem as datas onde ocorreram as 3 bolas escolhidas
+                        d3 = r3.ocorrencias
+                        tmp = Bolas.objects.filter(ocorrencias=d3).values('bola').exclude(bola=b2).exclude(
+                        bola=b1).exclude(bola=b3) #obtidas todas as bolas que apareceram nas mesmas datas que forma comums às 3
+                        for t in tmp: # faz a contagem e adiciona á listaSugestões no formato pretendido
+                            if t.get('bola') in listaSugestoes:
+                                listaSugestoes[t.get('bola')] += 1
+                            else:
+                                listaSugestoes[t.get('bola')] = 1
+
+#Fim de sugestões para Quartetos
+
+        if size == 4:  # obter Quintetos
+
+            b1 = bolasEscolhidas.get(nvazio.pop())
+            b2 = bolasEscolhidas.get(nvazio.pop())
+            b3 = bolasEscolhidas.get(nvazio.pop())
+            b4 = bolasEscolhidas.get(nvazio.pop())
+
+            q1 = (Bolas.objects.filter(bola=b1))
+            for r1 in q1:
+                d1 = r1.ocorrencias
+                q2 = (Bolas.objects.filter(ocorrencias=d1).filter(bola=b2))
+                for r2 in q2:
+                    d2 = r2.ocorrencias
+                    q3 = (Bolas.objects.filter(ocorrencias=d2).filter(bola=b3))
+                    for r3 in q3:  # q3 contem as datas onde ocorreram as 3 bolas escolhidas
+                        d3 = r3.ocorrencias
+                        q4=(Bolas.objects.filter(ocorrencias=d3).filter(bola=b4))
+                        for r4 in q4:
+                            d4 = r4.ocorrencias
+
+                            tmp = Bolas.objects.filter(ocorrencias=d4).values('bola').exclude(bola=b1).exclude(
+                                bola=b2).exclude(bola=b3).exclude(bola=b4)
+                            for t in tmp:  # faz a contagem e adiciona á listaSugestões no formato pretendido
+                                if t.get('bola') in listaSugestoes:
+                                    listaSugestoes[t.get('bola')] += 1
+                                else:
+                                    listaSugestoes[t.get('bola')] = 1
+
+# Fim de sugestões para Quintetos
+
+#inicio verificar se já saiu chave
+        if size == 5:  # obter Quintetos
+
+            b1 = bolasEscolhidas.get(nvazio.pop())
+            b2 = bolasEscolhidas.get(nvazio.pop())
+            b3 = bolasEscolhidas.get(nvazio.pop())
+            b4 = bolasEscolhidas.get(nvazio.pop())
+            b5 = bolasEscolhidas.get(nvazio.pop())
+
+            q1 = (Bolas.objects.filter(bola=b1))
+            for r1 in q1:
+                d1 = r1.ocorrencias
+                q2 = (Bolas.objects.filter(ocorrencias=d1).filter(bola=b2))
+                for r2 in q2:
+                    d2 = r2.ocorrencias
+                    q3 = (Bolas.objects.filter(ocorrencias=d2).filter(bola=b3))
+                    for r3 in q3:  # q3 contem as datas onde ocorreram as 3 bolas escolhidas
+                        d3 = r3.ocorrencias
+                        q4 = (Bolas.objects.filter(ocorrencias=d3).filter(bola=b4))
+
+                        for r4 in q4:
+                            d4 = r4.ocorrencias
+                            q5 = (
+                            Bolas.objects.filter(ocorrencias=d4).filter(bola=b5))  # datas onde saiu a chave
+                            for d5 in q5:
+                                datas.append(d5.ocorrencias)
+
+
 
     else:
-        return render(request, 'core/loginpage.html')
+        #a listaSugestões poderia ser obtida diretamente de Query? (a tentar)
+
+        listaTmp= Bolas.objects.values('bola').annotate(vezes=Count('ocorrencias'))
+        for t in listaTmp:
+            b=t['bola']
+            v=t['vezes']
+            listaSugestoes[b]=v
+
+    return render(request, 'core/sugestoes.html', {'lista': listaSugestoes, 'escolhas':bolasEscolhidas, 'data5':datas})
+
+def carregarficheiro(request):
+    return render(request, 'core/carregarficheiro.html')
+
+def carregaF(request):
+    Bolas.objects.all().delete()
+    Estrelas.objects.all().delete()
+    cabecalho = 1
+    f = open(os.path.join(settings.PROJECT_ROOT, 'euromillions.csv'), "r")
+    linhas = f.readlines()
+    # maxSorteios=len(linhas)-cabecalho
+    sorteios = linhas[1:]
+    for s in sorteios:
+        s = s.rstrip('\n')
+        s = s.split(';')
+        n = s[0]
+        data = s[1]
+        data = datetime.strptime(data, '%d/%m/%Y')
+        bolas = [int(i) for i in s[2:7]]
+        estrelas = [int(i) for i in s[7:9]]
+        # Atualiza tabela Tabela de Sorteio
+        si = Sorteio(nSorteio=n, dataSorteio=data, bola1=bolas[0], bola2=bolas[1], bola3=bolas[2], bola4=bolas[3],
+                     bola5=bolas[4], estrela1=estrelas[0], estrela2=estrelas[1])
+        si.save()
+        # Ordena chave
+        bolas.sort()
+        estrelas.sort()
+        # Vai preencher as restantes tabelas
+        preencheTabelasBolas(bolas,data)
+        preencheTabelasEstrelas(estrelas, data)
+
+    return HttpResponse(estrelas)
+    # return HttpResponse("-----"+n+","+str(data)+","+str(bolas)+","+str(estrelas))
+    # return HttpResponse(linhas)
+    # return HttpResponse ("Página de administração")
+
+
+def preencheTabelasBolas(novasBolas, data):
+
+    for b in novasBolas:
+        s = Bolas(bola=b, ocorrencias=data)
+        s.save()
+
+def preencheTabelasEstrelas(novasEstrelas, data):
+    for e in novasEstrelas:
+        s = Estrelas(estrela=e,ocorrencias=data)
+        s.save()
+
 

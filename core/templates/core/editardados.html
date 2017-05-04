@@ -3,7 +3,7 @@
         {% csrf_token %}
         <p>Nome :  <input type="text" name="snome" placeholder="{{ user.first_name }}"> </p>
         <p>Apelido :  <input type="text" name="sapelido" placeholder="{{ user.last_name }}"> </p>
-        <p>Username : <input type="text" name="susername" placeholder="{{ user.username }}"> </p>
+
         <p>Email :  <input type="email" name="semail" placeholder="{{ user.email }}"> </p>
 
         <p>NIF :  <input type="number" name="snif" placeholder="{{ user.utilizador.NIF }}"> </p>

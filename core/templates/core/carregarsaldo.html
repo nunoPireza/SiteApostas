@@ -1,4 +1,11 @@
 
+<p>Tens na tua conta {{ user.saldo.saldo }} Euros</p>
+
+<form action="{% url 'core:carregaS'%}" method="post">
+    <button type="submit" value="Submit">5€</button>
+    <button type="submit" value="Submit">10€</button>
+    <button type="submit" value="Submit">25€</button>
+</form>
 
 <p>Aqui teremos uma lista com 3 opções de carregamento que o utilizador carregando acrescenta
 dinheiro à conta automaticamente

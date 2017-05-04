@@ -1,0 +1,29 @@
+<!-- <a>" lista </a> -->
+{% load extrafiltro %}
+<p> DADOS DAS SUGESTOES </p>
+
+{% if data5 %}
+    <p> Este sorteio já apareceu nas datas:</p>
+    {% for d in data5 %}
+            {{ d }}
+            <br>
+        {% endfor %}
+
+{% else %}
+    {% if lista %}
+        {% if not escolhas %}
+            <p>Lista ordenada de frequencia</p>
+        {% else  %}
+        <p>encontramos estas sugestões para {% for ek, n in escolhas.items %}{{ n }}-{% endfor %} </p>
+
+        {% endif %}
+
+        {% for n, v in lista.items %}
+            {{ n }}||{{ v }}
+            <br>
+        {% endfor %}
+
+    {% else %}
+        <a>Não foi encontrada nenhuma sugestão válida</a>
+    {% endif %}
+{% endif %}
