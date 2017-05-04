@@ -33,4 +33,5 @@ urlpatterns = [
     url(r'^(?P<aposta_id>[0-9]+)/$', views.detalhe, name='detalhe'),
     url(r'^novaaposta/$', views.novaaposta, name='novaaposta'),
     url(r'^gravaAposta/$', views.gravaAposta, name='gravaAposta'),
+    url(r'^enviarEmail/$', views.enviarEmail, name='enviarEmail'),
     ]
