@@ -38,11 +38,7 @@ def admin(request):
     return render(request, 'core/admin.html')
 
 def novoRegisto(request):
-    emai = request.POST['input_email']
-    lista
     try:
-        if User.email.__eq__(request.POST['input_email']):
-            raise
         fuser = User.objects.create_user(request.POST['input_username'], request.POST['input_email'],
                                          request.POST['input_password'])
         fuser.first_name = request.POST['input_name']
