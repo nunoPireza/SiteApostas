@@ -4,7 +4,6 @@ from django.contrib.auth.views import (
    login, logout, password_reset, password_reset_done, password_reset_confirm, password_reset_complete
 )
 
-
 urlpatterns = [
     url(r'^$', views.inicio, name='inicio'),
     url(r'^logout/$', logout, {'template_name': 'core/logout.html'}, name='logout'),
@@ -24,18 +23,15 @@ urlpatterns = [
     url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         password_reset_confirm, name='password_reset_confirm'),
     url(r'^reset/done/$', password_reset_complete, name='password_reset_complete'),
-    url(r'^apostar/$', views.apostar, name='apostar'),
+	url(r'^apostar/$', views.apostar, name='apostar'),
     url(r'^areapessoal/$', views.areapessoal, name='areapessoal'),
     url(r'^carregarsaldo$', views.carregarsaldo, name='carregarsaldo'),
     url(r'^editardados/$', views.editardados, name='editardados'),
     url(r'^editRegisto/$', views.editRegisto, name='editRegisto'),
     url(r'^mostardados$', views.mostrardados, name='mostrardados'),
-    url(r'^$', views.aposta, name='aposta'),
+	url(r'^$', views.aposta, name='aposta'),
     url(r'^(?P<aposta_id>[0-9]+)/$', views.detalhe, name='detalhe'),
     url(r'^novaaposta/$', views.novaaposta, name='novaaposta'),
     url(r'^gravaAposta/$', views.gravaAposta, name='gravaAposta'),
-    url(r'^sugestoes/$', views.sugestoes, name='sugestoes'),    
-    url(r'^apostar/$', views.apostar, name='apostar'),
-    url(r'^carregarficheiro/$', views.carregarficheiro, name='carregarficheiro'),
-    url(r'^carregaF/$', views.carregaF, name='carregaF'),
+    url(r'^enviarEmail/$', views.enviarEmail, name='enviarEmail'),
     ]

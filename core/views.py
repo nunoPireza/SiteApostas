@@ -38,59 +38,39 @@ def admin(request):
     return render(request, 'core/admin.html')
 
 def novoRegisto(request):
-    if request.POST['input_username'] is '':
-        context = {'invalid_user': True}
-        return render(request, "core/registo.html", context)
-
-    if request.POST['input_email'] is '':
-        context = {'invalid_email': True}
-        return render(request, "core/registo.html", context)
-
-    if request.POST['input_password'] is '':
-        context = {'invalid_pass': True}
-        return render(request, "core/registo.html", context)
-
-    if request.POST['input_name'] is '':
-        context = {'invalid_name': True}
-        return render(request, "core/registo.html", context)
-
-    if request.POST['input_surname'] is '':
-        context = {'invalid_last': True}
-        return render(request, 'core/registo.html', context)
-    else:
-        try:
-            fuser = User.objects.create_user(request.POST['input_username'], request.POST['input_email'],
-                                             request.POST['input_password'])
-            fuser.first_name = request.POST['input_name']
-            fuser.last_name = request.POST['input_surname']
-            fuser.save()
-        except:
-            context = {}
-            context['same_user'] = True
-            return render(request, 'core/registo.html', context)
-
-        fuser = Utilizador(user=fuser)
-        if request.POST['input_nif']:
-            fuser.NIF = request.POST['input_nif']
-        if request.POST['input_morada']:
-            fuser.morada = request.POST['input_morada']
-        if request.POST['input_codpostal']:
-            fuser.codigopostal = request.POST['input_codpostal']
-        if request.POST['input_contacto']:
-            fuser.contacto = request.POST['input_contacto']
-        if request.POST['input_loc']:
-            fuser.localidade = request.POST['input_loc']
-        if request.POST['input_pais']:
-            fuser.pais = request.POST['input_pais']
-
+    try:
+        if User.email.__eq__(request.POST['input_email']):
+            raise
+        fuser = User.objects.create_user(request.POST['input_username'], request.POST['input_email'],
+                                         request.POST['input_password'])
+        fuser.first_name = request.POST['input_name']
+        fuser.last_name = request.POST['input_surname']
         fuser.save()
+    except:
+        context = {}
+        context['same_user'] = True
+        return render(request, 'core/registo.html', context)
 
-        emaildestino = request.POST['input_email']
-        destinatario = request.POST['input_name'] + " " + request.POST['input_surname']
-        titulo = 'Email de confirmação de registo'
-        mensagem = 'Bem vindo ao site de apostas ' + destinatario + "."
-        send_mail(titulo, mensagem, settings.EMAIL_HOST_USER, [emaildestino], fail_silently=True)
-        return render(request, 'core/homepage.html')
+    fuser = Utilizador(user=fuser)
+    fuser.NIF = request.POST['input_nif']
+    fuser.contacto = request.POST['input_contacto']
+    if request.POST['input_morada']:
+        fuser.morada = request.POST['input_morada']
+    if request.POST['input_codpostal']:
+        fuser.codigopostal = request.POST['input_codpostal']
+    if request.POST['input_loc']:
+        fuser.localidade = request.POST['input_loc']
+    if request.POST['input_pais']:
+        fuser.pais = request.POST['input_pais']
+
+    fuser.save()
+    emaildestino = request.POST['input_email']
+    emailadmin = 'siteapostaspr@gmail.com'
+    destinatario = request.POST['input_name'] + " " + request.POST['input_surname']
+    titulo = 'Email de confirmação de registo'
+    mensagem = 'Bem vindo ao site de apostas ' + destinatario + "."
+    send_mail(titulo, mensagem, settings.EMAIL_HOST_USER, [emaildestino,emailadmin], fail_silently=True)
+    return render(request, 'core/homepage.html')
 
 
 def registo(request):
@@ -441,3 +421,9 @@ def preencheTabelasEstrelas(novasEstrelas, data):
         s.save()
 
 
+def enviarEmail(request):
+    emaildestino = request.POST['input_email']
+    titulo = 'Email de confirmação de registo'
+    mensagem = 'Bem vindo ao site de apostas '
+    send_mail(titulo, mensagem, settings.EMAIL_HOST_USER, [emaildestino], fail_silently=False)
+    return render(request, 'core/homepage.html')
