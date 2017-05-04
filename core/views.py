@@ -38,6 +38,8 @@ def admin(request):
     return render(request, 'core/admin.html')
 
 def novoRegisto(request):
+    emai = request.POST['input_email']
+    lista
     try:
         if User.email.__eq__(request.POST['input_email']):
             raise
@@ -136,10 +138,10 @@ def submeterpass(request):
             return HttpResponseRedirect(reverse('core:changepassword'))
     else:
         return HttpResponse("É necessário estar autenticado.")
-
+'''
 def apostar(request):
     return render(request, 'core/apostar.html')
-
+'''
 @login_required
 def areapessoal(request):
     return render(request, 'core/areapessoal.html')
@@ -215,8 +217,7 @@ def carregaS(request):
 
 
 def apostar(request):
-    teste = get_object_or_404(Bolas, pk=31)
-    return render(request, 'core/apostar.html', {'lista':teste})
+    return render(request, 'core/apostar.html')
 
 @csrf_exempt
 def sugestoes(request):
