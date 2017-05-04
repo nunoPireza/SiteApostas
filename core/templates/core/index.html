@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Site de Apostas</title>
+</head>
+<body>
+{% if apostas_list %}
+<ul>
+{% for aposta in apostas_list %}
+<li><a href="{% url 'core:detalhe' aposta.id%}">{{ aposta.nome }}</a></li>
+{% endfor %}
+</ul>
+{% else %}
+<p>Não existem apostas disponíveis.</p>
+{% endif %}
+
+<a href="{% url 'core:novaaposta' %}">Nova Aposta</a><br>
+
+</br>
+
+
+</body>
+</html>

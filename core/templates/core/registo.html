@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Novo Registo</title>
+</head>
+<body>
+<h1> Bem vindo ao site de Apostas. Não perca mais tempo e faça já o seu registo.</h1>
+
+    <form action="{% url 'core:novoRegisto'%}" method="post">
+        {% csrf_token %}
+        <p><strong>Nome :  </strong><input type="text" placeholder="Nome" name="input_name" required/></p>
+        <p><strong>Apelido :  </strong><input type="text" placeholder="Apelido" name="input_surname" required/></p>
+        <p><strong>Username :  </strong><input type="text" autocomplete="off" placeholder="Username" name="input_username"required/></p>
+            {% if same_user %}
+            <strong>Já existe um utilizador com esse username.</strong>
+            {% endif %}
+        <p><strong>Password :  </strong><input type="password" autocomplete="off" placeholder="Password" name="input_password" pattern=".{5,}" title="Password com 8 caracteres obrigatórios." required/></p>
+        <p><strong>Email :  </strong><input type="email" placeholder="Email" name="input_email" required/></p>
+        <p><strong>NIF :  </strong><input type="number" placeholder="NIF" name="input_nif"/ required></p>
+        <p><strong>Contacto :  </strong><input type="number" placeholder="Contacto" name="input_contacto"/></p>
+        <p><strong>Código Postal :  </strong><input type="number" placeholder="Código Postal" name="input_codpostal"/></p>
+        <p><strong>Morada :  </strong><input type="text" placeholder="Morada" name="input_morada"/></p>
+        <p><strong>Localidade :  </strong><input type="text" placeholder="Localidade" name="input_loc"/></p>
+        <p><strong>País :  </strong><input type="text" placeholder="País" name="input_pais"/></p>
+
+            <br><input type="submit" value="Registar"/>&nbsp;&nbsp;<button type="reset" value="Reset">Apagar Valores</button>
+        </form>
+<p><a href="{% url 'core:areacomum' %}"><button type="button">Voltar a homepage</button></a></p>
+
+</body>
+</html>
+
+

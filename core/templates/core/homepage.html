@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+</head>
+<body>
+<h1>estou na homepage </h1>
+<h2>Bem vindo, {{ user.get_full_name }} <small>{{ user.username }}</small>!</h2>
+
+
+<li><a href="{% url 'core:admin' %}"> Link para conta de administração</a></li>
+<li><a href="{% url 'core:password_reset' %}"> recuperar pass</a></li>
+<li><a href="{% url 'core:registo' %}"> Novo Registo</a></li>
+<h1>Aqui ficam imagens publicidade!!!</h1>
+</body>
+</html>
+{% endblock %}

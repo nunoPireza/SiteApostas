@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nova Aposta</title>
+</head>
+<body>
+
+
+{% block content %}
+
+<form action="{% url 'core:gravaAposta' %}" method="post">
+{% csrf_token %}
+  Aposta: <input type="text" name="aposta"><br>
+  <input type="submit" value="Gravar aposta e voltar à lista">
+</form>
+{% endblock %}
+
+
+</body>
+</html>

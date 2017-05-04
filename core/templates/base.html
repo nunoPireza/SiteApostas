@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}Site de Apostas{% endblock %}</title>
+  </head>
+  <body>
+    <header>
+      <h1>Apostando</h1>
+      {% if user.is_authenticated %}
+          <p>Bem vindo, {{ user.username }}  <a href="{% url 'core:logoutview' %}">[Sair]</a></p>
+      {% else %}
+           <p>Bem vindo, Convidado <a href="{% url 'core:loginpage' %}">[login]</a></p>
+      {% endif %}
+    </header>
+    <main>
+      {% block content %}
+      {% endblock %}
+    </main>
+  </body>
+</html>
