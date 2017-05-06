@@ -17,7 +17,7 @@ from django.db.models import Count
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
-from .models import Utilizador, Concurso, Aposta, Conta, Sorteio, Bolas, Estrelas
+from .models import Utilizador, Aposta, Conta, Sorteio, Bolas, Estrelas
 
 
 def inicio(request):

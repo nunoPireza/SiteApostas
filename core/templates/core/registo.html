@@ -11,7 +11,7 @@
         {% csrf_token %}
         <p><strong>Nome :  </strong><input type="text" placeholder="Nome" name="input_name" required/></p>
         <p><strong>Apelido :  </strong><input type="text" placeholder="Apelido" name="input_surname" required/></p>
-        <p><strong>Username :  </strong><input type="text" autocomplete="off" placeholder="Username" name="input_username"required/></p>
+        <p><strong>Username :  </strong><input type="text" autocomplete="off" placeholder="Username" name="input_username" required/></p>
             {% if same_user %}
                 <strong>Já existe um utilizador com este Username</strong>
             {%  elif same_email %}
@@ -19,7 +19,7 @@
             {% endif %}
         <p><strong>Password :  </strong><input type="password" autocomplete="off" placeholder="Password" name="input_password" pattern=".{5,}" title="Password com 8 caracteres obrigatórios." required/></p>
         <p><strong>Email :  </strong><input type="email" placeholder="Email" name="input_email" required/></p>
-        <p><strong>NIF :  </strong><input type="number" placeholder="NIF" name="input_nif"/ required></p>
+        <p><strong>NIF :  </strong><input type="number" placeholder="NIF" name="input_nif" required /></p>
         <p><strong>Contacto :  </strong><input type="number" placeholder="Contacto" name="input_contacto" required/></p>
         <p><strong>Código Postal :  </strong><input type="number" placeholder="Código Postal" name="input_codpostal"/></p>
         <p><strong>Morada :  </strong><input type="text" placeholder="Morada" name="input_morada"/></p>
