@@ -62,10 +62,8 @@ def novoRegisto(request):
     fuser.contacto = request.POST['input_contacto']
     if request.POST['input_morada']:
         fuser.morada = request.POST['input_morada']
-    if request.POST['input_codpostal']:
-        fuser.codigopostal = request.POST['input_codpostal']
-    if request.POST['input_loc']:
-        fuser.localidade = request.POST['input_loc']
+    if request.POST['input_iban']:
+        fuser.IBAN = request.POST['input_iban']
     if request.POST['input_pais']:
         fuser.pais = request.POST['input_pais']
 
