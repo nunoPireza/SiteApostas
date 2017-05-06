@@ -190,12 +190,10 @@ def editRegisto(request):
                 usr.NIF = request.POST['snif']
             if request.POST['scontacto']:
                 usr.contacto = request.POST['scontacto']
-            if request.POST['scodpostal']:
-                usr.codigopostal = request.POST['scodpostal']
+            if request.POST['siban']:
+                usr.IBAN = request.POST['siban']
             if request.POST['smorada']:
                 usr.morada = request.POST['smorada']
-            if request.POST['sloc']:
-                usr.localidade = request.POST['sloc']
             if request.POST['spais']:
                 usr.pais = request.POST['spais']
             usr.save()
