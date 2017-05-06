@@ -5,12 +5,13 @@
         <p>Apelido :  <input type="text" name="sapelido" placeholder="{{ user.last_name }}"> </p>
 
         <p>Email :  <input type="email" name="semail" placeholder="{{ user.email }}"> </p>
+        <p>IBAN :  <input type="number" name="siban" placeholder="{{ user.utilizador.IBAN}}"> </p>
 
         <p>NIF :  <input type="number" name="snif" placeholder="{{ user.utilizador.NIF }}"> </p>
         <p>Contacto :  <input type="number" name="scontacto" placeholder="{{ user.utilizador.contacto }}"> </p>
-        <p>Código Postal :  <input type="number" name="scodpostal" placeholder="{{ user.utilizador.codigopostal }}"> </p>
+
         <p>Morada :  <input type="text" name="smorada" placeholder="{{ user.utilizador.morada }}"> </p>
-        <p>Localidade :  <input type="text" name="sloc" placeholder="{{ user.utilizador.localidade }}"> </p>
+
         <p>País :  <input type="text" name="spais" placeholder="{{ user.utilizador.pais }}"></p>
 
             <br><input type="submit" value="Salvar">&nbsp;&nbsp;

@@ -62,10 +62,8 @@ def novoRegisto(request):
     fuser.contacto = request.POST['input_contacto']
     if request.POST['input_morada']:
         fuser.morada = request.POST['input_morada']
-    if request.POST['input_codpostal']:
-        fuser.codigopostal = request.POST['input_codpostal']
-    if request.POST['input_loc']:
-        fuser.localidade = request.POST['input_loc']
+    if request.POST['input_iban']:
+        fuser.IBAN = request.POST['input_iban']
     if request.POST['input_pais']:
         fuser.pais = request.POST['input_pais']
 
@@ -192,12 +190,10 @@ def editRegisto(request):
                 usr.NIF = request.POST['snif']
             if request.POST['scontacto']:
                 usr.contacto = request.POST['scontacto']
-            if request.POST['scodpostal']:
-                usr.codigopostal = request.POST['scodpostal']
+            if request.POST['siban']:
+                usr.IBAN = request.POST['siban']
             if request.POST['smorada']:
                 usr.morada = request.POST['smorada']
-            if request.POST['sloc']:
-                usr.localidade = request.POST['sloc']
             if request.POST['spais']:
                 usr.pais = request.POST['spais']
             usr.save()
