@@ -200,16 +200,16 @@ def editRegisto(request):
         except MultiValueDictKeyError:
             #context = {}
             #context['acc'] = acc
-            return HttpResponseRedirect(reverse('core:areapessoal'))
+            return HttpResponseRedirect(reverse('core:areapessoal')) #aqui devia ir para uma pagina de erro
     else:
-        return HttpResponse("Desculpe. Alguma coisa não funcionou!")
+        return HttpResponse("Desculpe. Alguma coisa não funcionou!") #aqui devia reencaminhar para o loginpage
 
 @login_required
 def carregarsaldo(request):
     return render(request, 'core/carregarsaldo.html')
 
 def carregaS(request):
-    return render(request, 'core/carregarsaldo.html')
+    return HttpResponse("Não implementado")
 
 
 def apostar(request):
@@ -376,7 +376,7 @@ def carregarficheiro(request):
 def carregaF(request):
     Bolas.objects.all().delete()
     Estrelas.objects.all().delete()
-    cabecalho = 1
+    #cabecalho = 1
     f = open(os.path.join(settings.PROJECT_ROOT, 'euromillions.csv'), "r")
     linhas = f.readlines()
     # maxSorteios=len(linhas)-cabecalho
