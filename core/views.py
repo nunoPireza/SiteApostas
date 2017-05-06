@@ -1,4 +1,6 @@
 import os
+from access_tokens import tokens
+from django.core.mail import EmailMessage
 from django.shortcuts import render, get_object_or_404, HttpResponse, HttpResponseRedirect, redirect
 from django.core.urlresolvers import reverse
 from django.conf import settings
@@ -38,19 +40,21 @@ def admin(request):
     return render(request, 'core/admin.html')
 
 def novoRegisto(request):
-    emai = request.POST['input_email']
-    lista
+    context = {}
     try:
-        if User.email.__eq__(request.POST['input_email']):
-            raise
+        for u in User.objects.all():
+            if u.email == (request.POST['input_email']):
+                context['same_email'] = True
+                raise
+
         fuser = User.objects.create_user(request.POST['input_username'], request.POST['input_email'],
                                          request.POST['input_password'])
         fuser.first_name = request.POST['input_name']
         fuser.last_name = request.POST['input_surname']
         fuser.save()
     except:
-        context = {}
-        context['same_user'] = True
+        if context['same_email'] == False:
+            context['same_user'] = True
         return render(request, 'core/registo.html', context)
 
     fuser = Utilizador(user=fuser)
@@ -67,11 +71,10 @@ def novoRegisto(request):
 
     fuser.save()
     emaildestino = request.POST['input_email']
-    emailadmin = 'siteapostaspr@gmail.com'
     destinatario = request.POST['input_name'] + " " + request.POST['input_surname']
     titulo = 'Email de confirmação de registo'
     mensagem = 'Bem vindo ao site de apostas ' + destinatario + "."
-    send_mail(titulo, mensagem, settings.EMAIL_HOST_USER, [emaildestino,emailadmin], fail_silently=True)
+    send_mail(titulo, mensagem, settings.EMAIL_HOST_USER, [emaildestino,settings.EMAIL_HOST_USER], fail_silently=True)
     return render(request, 'core/homepage.html')
 
 
@@ -418,13 +421,17 @@ def preencheTabelasBolas(novasBolas, data):
 
 def preencheTabelasEstrelas(novasEstrelas, data):
     for e in novasEstrelas:
-        s = Estrelas(estrela=e,ocorrencias=data)
+        s = Estrelas(estrela=e, ocorrencias=data)
         s.save()
 
-
 def enviarEmail(request):
+    token = tokens.generate(scope=(), key="some value", salt="None")
     emaildestino = request.POST['input_email']
-    titulo = 'Email de confirmação de registo'
-    mensagem = 'Bem vindo ao site de apostas '
-    send_mail(titulo, mensagem, settings.EMAIL_HOST_USER, [emaildestino], fail_silently=False)
+    msg = EmailMessage('Email de confirmação de registo.',
+                       'Bem vindo ao site de Apostos.'
+                       'Caro utilizador, por seu pedido junto enviamos um link para recuperação de password' + token,
+                       settings.EMAIL_HOST_USER, [emaildestino],
+                       cc=[settings.EMAIL_HOST_USER])
+    msg.content_subtype = "html"
+    msg.send()
     return render(request, 'core/homepage.html')

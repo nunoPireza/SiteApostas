@@ -13,7 +13,9 @@
         <p><strong>Apelido :  </strong><input type="text" placeholder="Apelido" name="input_surname" required/></p>
         <p><strong>Username :  </strong><input type="text" autocomplete="off" placeholder="Username" name="input_username"required/></p>
             {% if same_user %}
-            <strong>Já existe um utilizador</strong>
+                <strong>Já existe um utilizador com este Username</strong>
+            {%  elif same_email %}
+                 <strong>Já existe um utilizador com este email</strong>
             {% endif %}
         <p><strong>Password :  </strong><input type="password" autocomplete="off" placeholder="Password" name="input_password" pattern=".{5,}" title="Password com 8 caracteres obrigatórios." required/></p>
         <p><strong>Email :  </strong><input type="email" placeholder="Email" name="input_email" required/></p>
