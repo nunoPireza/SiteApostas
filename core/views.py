@@ -38,7 +38,11 @@ def admin(request):
     return render(request, 'core/admin.html')
 
 def novoRegisto(request):
+    emai = request.POST['input_email']
+    lista
     try:
+        if User.email.__eq__(request.POST['input_email']):
+            raise
         fuser = User.objects.create_user(request.POST['input_username'], request.POST['input_email'],
                                          request.POST['input_password'])
         fuser.first_name = request.POST['input_name']
@@ -200,16 +204,16 @@ def editRegisto(request):
         except MultiValueDictKeyError:
             #context = {}
             #context['acc'] = acc
-            return HttpResponseRedirect(reverse('core:areapessoal')) #aqui devia ir para uma pagina de erro
+            return HttpResponseRedirect(reverse('core:areapessoal'))
     else:
-        return HttpResponse("Desculpe. Alguma coisa não funcionou!") #aqui devia reencaminhar para o loginpage
+        return HttpResponse("Desculpe. Alguma coisa não funcionou!")
 
 @login_required
 def carregarsaldo(request):
     return render(request, 'core/carregarsaldo.html')
 
 def carregaS(request):
-    return HttpResponse("Não implementado")
+    return render(request, 'core/carregarsaldo.html')
 
 
 def apostar(request):
@@ -376,7 +380,7 @@ def carregarficheiro(request):
 def carregaF(request):
     Bolas.objects.all().delete()
     Estrelas.objects.all().delete()
-    #cabecalho = 1
+    cabecalho = 1
     f = open(os.path.join(settings.PROJECT_ROOT, 'euromillions.csv'), "r")
     linhas = f.readlines()
     # maxSorteios=len(linhas)-cabecalho

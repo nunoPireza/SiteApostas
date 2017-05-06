@@ -4,13 +4,13 @@ from django.utils import timezone
 
 class Utilizador(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    IBAN = models.IntegerField(max_length=21)
     NIF = models.IntegerField(null=True)
     contacto = models.IntegerField(null=True)
-    codigopostal = models.IntegerField(null=True)
     morada = models.CharField(max_length=200, null=True)
     localidade = models.CharField(max_length=50, null=True)
     pais = models.CharField(max_length=50, null=True)
-	
+
 
     def __str__(self):
         return self.user.username
