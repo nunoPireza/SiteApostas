@@ -37,14 +37,23 @@ def areacomum(request):
 
 def admin(request):
     context = {}
-    if request.user.is_authenticated:
-        usr = get_object_or_404(User, user=request.user.id)
-        if usr.is_superuser:
-            context['isadmin']=True
-    return render(request, 'core/admin.html')
+    if User.is_superuser:
+        context['isadmin'] = True
+    return render(request, 'core/admin.html', context)
 
 def novoRegisto(request):
     context = {}
+    nif_str = len(str(request.POST['input_nif']))
+    contact_str = len(str(request.POST['input_contacto']))
+
+    if int(nif_str) != 9:
+        context['nifgreater'] = True
+        return render(request, 'core/registo.html', context)
+
+    if int(contact_str) != 9:
+        context['contactogreater'] = True
+        return render(request, 'core/registo.html', context)
+
     try:
         for u in User.objects.all():
             if u.email == (request.POST['input_email']):
@@ -64,6 +73,7 @@ def novoRegisto(request):
     fuser = Utilizador(user=fuser)
     fuser.NIF = request.POST['input_nif']
     fuser.contacto = request.POST['input_contacto']
+
     if request.POST['input_morada']:
         fuser.morada = request.POST['input_morada']
     if request.POST['input_pais']:
@@ -563,4 +573,10 @@ def enviarEmail(request):
                        cc=[settings.EMAIL_HOST_USER])
     msg.content_subtype = "html"
     msg.send()
-    return render(request, 'core/homepage.html')
+    context = {}
+    if User.is_superuser:
+        context['isadmin'] = True
+        context['messagesuccess']  = True
+        return render(request, 'core/admin.html', context)
+    else:
+        return render(request, 'core/areacomum.html')

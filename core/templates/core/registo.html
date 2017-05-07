@@ -20,7 +20,13 @@
         <p><strong>Password :  </strong><input type="password" autocomplete="off" placeholder="Password" name="input_password" pattern=".{5,}" title="Password com 8 caracteres obrigatórios." required/></p>
         <p><strong>Email :  </strong><input type="email" placeholder="Email" name="input_email" required/></p>
         <p><strong>NIF :  </strong><input type="number" placeholder="NIF" name="input_nif" required /></p>
+            {% if nifgreater %}
+                <strong>NIF com 9 digitos</strong>
+            {%  endif %}
         <p><strong>Contacto :  </strong><input type="number" placeholder="Contacto" name="input_contacto" required/></p>
+            {%  if contactogreater %}
+                <strong>Contacto com 9 digitos</strong>
+            {%  endif %}
         <p><strong>Morada :  </strong><input type="text" placeholder="Morada" name="input_morada"/></p>
         <p><strong>País :  </strong><input type="text" placeholder="País" name="input_pais"/></p>
 
