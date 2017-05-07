@@ -1,29 +1,182 @@
 <!-- <a>" lista </a> -->
+
+
+<style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 5px;
+    }
+</style>
+
 {% load extrafiltro %}
 <p> DADOS DAS SUGESTOES </p>
 
-{% if data5 %}
-    <p> Este sorteio já apareceu nas datas:</p>
-    {% for d in data5 %}
-            {{ d }}
-            <br>
-        {% endfor %}
 
-{% else %}
-    {% if lista %}
-        {% if not escolhas %}
-            <p>Lista ordenada de frequencia</p>
-        {% else  %}
-        <p>encontramos estas sugestões para {% for ek, n in escolhas.items %}{{ n }}-{% endfor %} </p>
 
-        {% endif %}
 
-        {% for n, v in lista.items %}
-            {{ n }}||{{ v }}
-            <br>
-        {% endfor %}
+    {% if sugestoes or estrelasSugeridas or data5 or data2%}
+    {% if sugestoes %}
+        <div style="float: left">
+            <table id='Bolas' style="width:30%">
+                    {% if not escolhas %}
+                        <th colspan="2">Lista de frequencia bolas</th>
 
+                    {% else %}
+                        <th colspan="2">sugestões para {% for ek, n in escolhas.items %}{{ n }}-{% endfor %} </th>
+
+                    {% endif %}
+                    <tr>
+                        <th onclick="sortTable(0,'Bolas')"> Bola</th>
+                        <th onclick="sortTable(0,'Bolas')"> Vezes</th>
+                    </tr>
+
+                    {% for n, v in sugestoes.items %}
+                        <tr>
+                            <td>{{ n }}</td>
+                            <td>{{ v }}</td>
+                        </tr>
+                    {% endfor %}
+
+
+            </table>
+        </div>
     {% else %}
-        <a>Não foi encontrada nenhuma sugestão válida</a>
+         {% if data5 %}
+             <div style="float: left">
+                <table id='bolasD' style="width:30%">
+                    <th onclick="sortTable(0,'bolasD')"> ocorreu em:</th>
+                    {% for d in data5 %}
+                        <tr>
+                            <td>{{ d }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+             </div>
+         {% endif %}
     {% endif %}
+    <div style="float: left">
+    {% if not data2  %}
+        <table id='Estrelas' style="width:30%">
+            {% if not estrelasEscolhidas%}
+                <tr>
+                    <th colspan="2"> Frequencia das estrelas</th>
+                </tr>
+            {% else %}
+                {% if estrelasSugeridas %}
+                    <tr>
+                        <th colspan="2"> Par para a estrela {% for k, e in estrelasEscolhidas.items %} {{ e }}
+                            - {% endfor %} </th>
+                    </tr>
+                {% endif %}
+            {% endif %}
+            <tr>
+                <th onclick="sortTable(0,'Estrelas')">Estrela</th>
+                <th onclick="sortTable(1,'Estrelas')">Vezes</th>
+            </tr>
+            {% for e,v in estrelasSugeridas.items %}
+                <tr>
+                    <td>{{ e }}</td>
+                    <td>{{ v }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+    {% else %}
+
+                <table id='estrelasD' style="width:30%">
+                    <tr>
+                        <th onclick="sortTable(0,'estrelasD')"> ocorreu em:</th>
+                    </tr>
+                    {% for d in data2 %}
+                        <tr>
+                            <td>{{ d }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+    {% endif %}
+{% else %}
+    <a>Não foi encontrada nenhuma sugestão válida</a>
 {% endif %}
+
+ <div style="float: right">
+     <table id="epn">
+         <tr>
+             <th>Estrelas por Números</th>
+         </tr>
+         {% if estrelasPorNumeros %}
+         <tr>
+             <th onclick="sortTable(0,'epn')"> Estrela </th>
+             <th onclick="sortTable(1,'epn')"> Vezes </th>
+         </tr>
+            {% for est,vz in estrelasPorNumeros %}
+             <tr>
+                <td> {{ est }} </td>
+                <td>{{ vz }} </td>
+             </tr>
+            {% endfor %}
+         {% endif %}
+     </table>
+ </div>
+
+<script type="text/javascript">
+
+function sortTable(n,nomeTabela) {
+  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  table = document.getElementById(nomeTabela);
+  switching = true;
+  //Set the sorting direction to ascending:
+  dir = "asc";
+  /*Make a loop that will continue until
+  no switching has been done:*/
+  while (switching) {
+    //start by saying: no switching is done:
+    switching = false;
+    rows = table.getElementsByTagName("TR");
+    /*Loop through all table rows (except the
+    first, which contains table headers):*/
+    for (i = 2; i < (rows.length - 1); i++) {
+      //start by saying there should be no switching:
+      shouldSwitch = false;
+      /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+      x = rows[i].getElementsByTagName("TD")[n];
+      y = rows[i + 1].getElementsByTagName("TD")[n];
+      /*check if the two rows should switch place,
+      based on the direction, asc or desc:*/
+      if (dir == "asc") {
+        if (parseInt(x.innerHTML) > parseInt(y.innerHTML) ) {
+          //if so, mark as a switch and break the loop:
+          shouldSwitch= true;
+          break;
+        }
+      } else if (dir == "desc") {
+        if (parseInt(x.innerHTML) < parseInt(y.innerHTML) ) {
+          //if so, mark as a switch and break the loop:
+          shouldSwitch= true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      /*If a switch has been marked, make the switch
+      and mark that a switch has been done:*/
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      //Each time a switch is done, increase this count by 1:
+      switchcount ++;
+    } else {
+      /*If no switching has been done AND the direction is "asc",
+      set the direction to "desc" and run the while loop again.*/
+      if (switchcount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
+</script>
