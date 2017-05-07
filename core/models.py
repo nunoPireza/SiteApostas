@@ -5,7 +5,6 @@ import datetime
 
 class Utilizador(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    IBAN = models.IntegerField(null=True)
     NIF = models.IntegerField(null=True)
     contacto = models.IntegerField(null=True)
     morada = models.CharField(max_length=200, null=True)
@@ -16,6 +15,7 @@ class Utilizador(models.Model):
 
 class Conta(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    IBAN = models.IntegerField(null=True)
     saldo = models.DecimalField(max_digits=8, decimal_places=2, null= True)
     premios = models.DecimalField(max_digits=8, decimal_places=2, null= True)
 
