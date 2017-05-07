@@ -244,7 +244,7 @@ def carregaS(request):
 
 
 
-
+@login_required
 def apostar(request):
     return render(request, 'core/apostar.html')
 
@@ -484,6 +484,18 @@ def epn(data,estrelasPorNumeros):
         else:
             estrelasPorNumeros[t.estrela] = 1
     return estrelasPorNumeros
+
+def submeteraposta(request):
+    PRECOAPOSTA=2.5
+    if Conta.objects.filter(user_id=request.user.id).exists():
+        conta=Conta.objects.filter(user_id=request.user.id)
+        if conta.saldo>=PRECOAPOSTA:
+            conta.saldo.set(conta.saldo-PRECOAPOSTA)
+
+def inserirconcurso(request):
+    concursoAtivo=Sorteio.objects.filter(activo=True)
+    concursoAtivo=concursoAtivo[0].nSorteio
+    return render(request, 'core/inserirconcurso.html')
 
 def carregarficheiro(request):
     return render(request, 'core/carregarficheiro.html')

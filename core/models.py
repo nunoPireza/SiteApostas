@@ -25,13 +25,9 @@ class Conta(models.Model):
 class Sorteio(models.Model):
     nSorteio=models.PositiveSmallIntegerField(primary_key=True)
     dataSorteio=models.DateField(auto_now=False, auto_now_add=False)
-    bola1 =models.PositiveSmallIntegerField()
-    bola2 =models.PositiveSmallIntegerField()
-    bola3 =models.PositiveSmallIntegerField()
-    bola4 =models.PositiveSmallIntegerField()
-    bola5 =models.PositiveSmallIntegerField()
-    estrela1 =models.PositiveSmallIntegerField()
-    estrela2 =models.PositiveSmallIntegerField()
+    bolas =models.PositiveSmallIntegerField()
+    estrelas =models.PositiveSmallIntegerField()
+    activo=models.BooleanField(default=False)
 
     def __str__(self):
         return self.id
@@ -52,13 +48,8 @@ class Aposta(models.Model):
     nSorteio = models.ForeignKey(Sorteio, on_delete=models.CASCADE)
     nConta = models.ForeignKey(Conta, on_delete=models.CASCADE)
     dataAposta = models.DateTimeField('dataaposta')
-    b1 = models.CharField(max_length=2)
-    b2 = models.CharField(max_length=2)
-    b3 = models.CharField(max_length=2)
-    b4 = models.CharField(max_length=2)
-    b5 = models.CharField(max_length=2)
-    e1 = models.CharField(max_length=2)
-    e2 = models.CharField(max_length=2)
+    bolas = models.PositiveSmallIntegerField()
+    estrelas = models.PositiveSmallIntegerField()
 
     def __str__(self):
         return self.id
