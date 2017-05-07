@@ -226,17 +226,20 @@ def carregarsaldo(request):
     return render(request, 'core/carregarsaldo.html')
 
 def carregaS(request):
-    r = get_object_or_404(Conta, pk=request.user.id)
-    if request.POST.get('5e'):
-        r.saldo += 5
-        r.save()
-    elif request.POST.get('10e'):
-        r.saldo += 10
-        r.save()
-    elif request.POST.get('25e'):
-        r.saldo += 25
-        r.save()
-    return HttpResponseRedirect(reverse('core:carregarsaldo'))
+    if Conta.objects.filter(user_id=request.user.id).exists():
+        r = get_object_or_404(Conta, pk=request.user.id)
+        if request.POST.get('5e'):
+            r.saldo += 5
+            r.save()
+        elif request.POST.get('10e'):
+            r.saldo += 10
+            r.save()
+        elif request.POST.get('25e'):
+            r.saldo += 25
+            r.save()
+        return HttpResponseRedirect(reverse('core:carregarsaldo'))
+    else:
+        return HttpResponseRedirect(reverse('core:criarInfoBanc'))
 
 
 
