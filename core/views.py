@@ -16,7 +16,6 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
-from django.core.exceptions import ObjectDoesNotExist
 from .models import Utilizador, Aposta, Conta, Sorteio, Bolas, Estrelas
 
 
@@ -227,31 +226,19 @@ def carregarsaldo(request):
     return render(request, 'core/carregarsaldo.html')
 
 def carregaS(request):
-    #if Conta.objects.filter(user_id=request.user.id.exists()):
+    r = get_object_or_404(Conta, pk=request.user.id)
+    if request.POST.get('5e'):
+        r.saldo += 5
+        r.save()
+    elif request.POST.get('10e'):
+        r.saldo += 10
+        r.save()
+    elif request.POST.get('25e'):
+        r.saldo += 25
+        r.save()
+    return HttpResponseRedirect(reverse('core:carregarsaldo'))
 
 
-    usr = request.user.id
-    cnt = Conta(saldo= 0.0, premios = 0.0, user_id =usr)
-    cnt.save()
-    return HttpResponseRedirect(reverse('core:areapessoal'))
-
-'''
-        else:
-            r = get_object_or_404(Conta, pk=request.user.id)
-            if request.POST.get('5e'):
-                r.saldo += 5
-                r.save()
-            elif request.POST.get('10e'):
-                r.saldo += 10
-                r.save()
-            elif request.POST.get('25e'):
-                r.saldo += 25
-                r.save()
-                return HttpResponseRedirect(reverse('core:areapessoal'))
-            else:
-                return HttpResponse('erro')
-
-'''
 
 
 

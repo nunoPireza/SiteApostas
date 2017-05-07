@@ -1,5 +1,5 @@
 
-<p>Tens na tua conta {{ user.Conta.saldo }} Euros</p>
+<p>Tens na tua conta {{ user.conta.saldo }} Euros</p>
 
 <form action="{% url 'core:carregaS'%}" enctype="multipart/form-data" method="post">
     {% csrf_token %}
