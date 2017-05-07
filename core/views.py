@@ -37,14 +37,23 @@ def areacomum(request):
 
 def admin(request):
     context = {}
-    if request.user.is_authenticated:
-        usr = get_object_or_404(User, user=request.user.id)
-        if usr.is_superuser:
-            context['isadmin']=True
-    return render(request, 'core/admin.html')
+    if User.is_superuser:
+        context['isadmin'] = True
+    return render(request, 'core/admin.html', context)
 
 def novoRegisto(request):
     context = {}
+    nif_str = len(str(request.POST['input_nif']))
+    contact_str = len(str(request.POST['input_contacto']))
+
+    if int(nif_str) != 9:
+        context['nifgreater'] = True
+        return render(request, 'core/registo.html', context)
+
+    if int(contact_str) != 9:
+        context['contactogreater'] = True
+        return render(request, 'core/registo.html', context)
+
     try:
         for u in User.objects.all():
             if u.email == (request.POST['input_email']):
@@ -64,6 +73,7 @@ def novoRegisto(request):
     fuser = Utilizador(user=fuser)
     fuser.NIF = request.POST['input_nif']
     fuser.contacto = request.POST['input_contacto']
+
     if request.POST['input_morada']:
         fuser.morada = request.POST['input_morada']
     if request.POST['input_pais']:
@@ -287,28 +297,52 @@ def sugestoes(request):
             for d in dtmp:
                 data = d.ocorrencias
                 estrelasPorNumeros = epn(data, estrelasPorNumeros)
-
         if request.POST['eb3'] is not '':
-            bolasEscolhidas['eb3'] = int(request.POST['eb3'])
+            b = int(request.POST['eb3'])
+            bolasEscolhidas['eb3'] = b
             nvazio.add('eb3')
+            dtmp = Bolas.objects.filter(bola=b)
+            for d in dtmp:
+                data = d.ocorrencias
+                estrelasPorNumeros = epn(data, estrelasPorNumeros)
         if request.POST['eb4'] is not '':
-            bolasEscolhidas['eb4'] = int(request.POST['eb4'])
+            b = int(request.POST['eb4'])
+            bolasEscolhidas['eb4'] = b
             nvazio.add('eb4')
+            dtmp = Bolas.objects.filter(bola=b)
+            for d in dtmp:
+                data = d.ocorrencias
+                estrelasPorNumeros = epn(data, estrelasPorNumeros)
         if request.POST['eb5'] is not '':
-            bolasEscolhidas['eb5'] = int(request.POST['eb5'])
+            b = int(request.POST['eb5'])
+            bolasEscolhidas['eb5'] = b
             nvazio.add('eb5')
+            dtmp = Bolas.objects.filter(bola=b)
+            for d in dtmp:
+                data = d.ocorrencias
+                estrelasPorNumeros = epn(data, estrelasPorNumeros)
         if request.POST['ee1'] is not '':
-            estrelasEscolhidas['ee1']=int(request.POST['ee1'])
-            envazio.add('ee1')
+                e = int(request.POST['ee1'])
+                estrelasEscolhidas['ee1'] = e
+                envazio.add('ee1')
+                dtmp = Estrelas.objects.filter(estrela=e)
+                for d in dtmp:
+                    data = d.ocorrencias
+                    numerosPorEstrelas = npe(data, numerosPorEstrelas)
         if request.POST['ee2'] is not '':
-            estrelasEscolhidas['ee2'] = int(request.POST['ee2'])
+            e = int(request.POST['ee2'])
+            estrelasEscolhidas['ee2'] = e
             envazio.add('ee2')
+            dtmp = Estrelas.objects.filter(estrela=e)
+            for d in dtmp:
+                data = d.ocorrencias
+                numerosPorEstrelas = npe(data, numerosPorEstrelas)
 
         # obter sugestões
         size = len(bolasEscolhidas)
         esize = len(envazio)
-        if size ==0:
-         listaSugestoes = getSugestoesBolas()
+        #if size ==0:
+         #listaSugestoes = getSugestoesBolas()
 
         if size == 1:  # obter duetos
             b1 = bolasEscolhidas.get(nvazio.pop())
@@ -426,8 +460,8 @@ def sugestoes(request):
                                 Bolas.objects.filter(ocorrencias=d4).filter(bola=b5))  # datas onde saiu a chave
                             for d5 in q5:
                                 datas5.append(d5.ocorrencias)
-        if esize==0:
-         sugestoesEstrelas = getSugestoesEstrelas()
+       # if esize==0:
+        # sugestoesEstrelas = getSugestoesEstrelas()
         if esize==1: # se for selecionada só uma estrela
             e1=estrelasEscolhidas.get(envazio.pop())
             s1 = Estrelas.objects.filter(estrela=e1)
@@ -458,33 +492,34 @@ def sugestoes(request):
 
 
 
-    else:
+    #else:
         # a listaSugestões poderia ser obtida diretamente de Query? (a tentar)
-        sugestoesEstrelas = getSugestoesEstrelas()
-        listaSugestoes= getSugestoesBolas()
+        #sugestoesEstrelas = getSugestoesEstrelas()
+        #listaSugestoes= getSugestoesBolas()
 
     return render(request, 'core/sugestoes.html',
-                  {'sugestoes': listaSugestoes, 'escolhas': bolasEscolhidas, 'data5': datas5, 'estrelasSugeridas':sugestoesEstrelas, 'estrelasEscolhidas':estrelasEscolhidas, 'data2':datas2, 'estrelasPorNumeros':estrelasPorNumeros})
+                  {'frequenciasBolas':getFrequenciasBolas(),'frequenciasEstrelas':getFrequenciasEstrelas(),'sugestoes': listaSugestoes, 'escolhas': bolasEscolhidas, 'data5': datas5, 'estrelasSugeridas':sugestoesEstrelas, 'estrelasEscolhidas':estrelasEscolhidas, 'data2':datas2, 'estrelasPorNumeros':estrelasPorNumeros, 'numerosPorEstrelas':numerosPorEstrelas})
 
-def getSugestoesEstrelas():
-    sugestoesEstrelas={}
+def getFrequenciasEstrelas():
+    frequenciasEstrelas={}
     listaTmp = Estrelas.objects.values('estrela').annotate(vezes=Count('ocorrencias'))
     for t in listaTmp:
-        sugestoesEstrelas[t['estrela']] = t['vezes']
-    return    sugestoesEstrelas
+        frequenciasEstrelas[t['estrela']] = t['vezes']
+    return frequenciasEstrelas
 
-def getSugestoesBolas():
-    listaSugestoes={}
+def getFrequenciasBolas():
+    listaFrequencias={}
     listaTmp = Bolas.objects.values('bola').annotate(vezes=Count('ocorrencias'))
     for t in listaTmp:
         b = t['bola']
         v = t['vezes']
-        listaSugestoes[b] = v
-    return listaSugestoes
+        listaFrequencias[b] = v
+    return listaFrequencias
 
 def epn(data,estrelasPorNumeros):
-    # vai procurar as estrelas do dia do sorteio
-    #para juntar ás anteriores
+    # vai procurar as estrelas
+    # do dia do sorteio  das bolas escolhidas
+    # para juntar ás anteriores
     epn = Estrelas.objects.filter(ocorrencias=data)
     for t in epn:
         #if t.get('estrela') in estrelasPorNumeros:
@@ -493,6 +528,20 @@ def epn(data,estrelasPorNumeros):
         else:
             estrelasPorNumeros[t.estrela] = 1
     return estrelasPorNumeros
+
+def npe(data, numerosPorEstrelas):
+    # vai procurar bolas q ocorreram com as estrelas escolhidas
+    # para juntar ás anteriores
+    npe = Bolas.objects.filter(ocorrencias=data)
+    for t in npe:
+
+        if t.bola in numerosPorEstrelas:
+            numerosPorEstrelas[t.bola] += 1
+        else:
+            numerosPorEstrelas[t.bola] = 1
+    return numerosPorEstrelas
+
+
 
 def submeteraposta(request):
     PRECOAPOSTA=2.5
@@ -538,8 +587,12 @@ def carregaF(request):
         # Vai preencher as restantes tabelas
         preencheTabelasBolas(bolas,data)
         preencheTabelasEstrelas(estrelas, data)
+        #as tabelas supra podem deixar de ser necessárias
+        # se os filter feitos a estas passarem para a tabela sorteio
+        #a PK de Sorteio não podia ser só o n.º de concurso
+        #(para pensar melhor)
 
-    return HttpResponse(estrelas)
+    return HttpResponse('Feito')
 
 
 def preencheTabelasBolas(novasBolas, data):
@@ -563,4 +616,10 @@ def enviarEmail(request):
                        cc=[settings.EMAIL_HOST_USER])
     msg.content_subtype = "html"
     msg.send()
-    return render(request, 'core/homepage.html')
+    context = {}
+    if User.is_superuser:
+        context['isadmin'] = True
+        context['messagesuccess']  = True
+        return render(request, 'core/admin.html', context)
+    else:
+        return render(request, 'core/areacomum.html')

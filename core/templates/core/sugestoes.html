@@ -1,29 +1,68 @@
-<!-- <a>" lista </a> -->
+<!-- <a>" lista </a>
+{% load extrafiltro %}
+-->
 
 
 <style>
     table, th, td {
         border: 1px solid black;
         border-collapse: collapse;
-    }
 
+    }
+    table.s{
+        height: 300px;
+        overflow: scroll;
+    }
     th, td {
         padding: 5px;
     }
 </style>
 
-{% load extrafiltro %}
+
 <p> DADOS DAS SUGESTOES </p>
 
+<div id="frequencias" style="float: left">
+    <table class="s" id="frequenciaBolas"  style="float: left">
+
+        <tr>
+            <th colspan="2">Frequencia Bolas</th>
+        </tr>
+        <tr>
+            <th onclick="sortTable(0,'frequenciasBolas')"> Bola</th>
+            <th onclick="sortTable(1,'frequenciasBolas')"> Vezes</th>
+        </tr>
+        {% for b,v in frequenciasBolas.items %}
+             <tr>
+                <td>{{ b }}</td>
+                <td>{{ v }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+<table id="frequenciaEstrelas" style="float: left">
+        <tr>
+            <th colspan="2">Frequencia Estrelas</th>
+        </tr>
+        <tr>
+            <th onclick="sortTable(0,'frequenciaEstrelas')"> Estrela </th>
+            <th onclick="sortTable(1,'frequenciaEstrelas')"> Vezes</th>
+        </tr>
+        {% for e,v in frequenciasEstrelas.items %}
+             <tr>
+                <td>{{ e }}</td>
+                <td>{{ v }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+</div>
 
 
 
     {% if sugestoes or estrelasSugeridas or data5 or data2%}
     {% if sugestoes %}
-        <div style="float: left">
-            <table id='Bolas' style="width:30%">
+        <div id="combinacoes" style="float: left">
+            <table id='Bolas' style="float: left">
                     {% if not escolhas %}
-                        <th colspan="2">Lista de frequencia bolas</th>
 
                     {% else %}
                         <th colspan="2">sugestões para {% for ek, n in escolhas.items %}{{ n }}-{% endfor %} </th>
@@ -43,10 +82,10 @@
 
 
             </table>
-        </div>
+
     {% else %}
          {% if data5 %}
-             <div style="float: left">
+
                 <table id='bolasD' style="width:30%">
                     <th onclick="sortTable(0,'bolasD')"> ocorreu em:</th>
                     {% for d in data5 %}
@@ -55,16 +94,15 @@
                         </tr>
                     {% endfor %}
                 </table>
-             </div>
          {% endif %}
     {% endif %}
+    </div>
+
     <div style="float: left">
     {% if not data2  %}
-        <table id='Estrelas' style="width:30%">
+        <table id='Estrelas' style="float: left">
             {% if not estrelasEscolhidas%}
-                <tr>
-                    <th colspan="2"> Frequencia das estrelas</th>
-                </tr>
+
             {% else %}
                 {% if estrelasSugeridas %}
                     <tr>
@@ -85,10 +123,10 @@
             {% endfor %}
         </table>
 
-    </div>
+
     {% else %}
 
-                <table id='estrelasD' style="width:30%">
+                <table id='estrelasD' style="float: left">
                     <tr>
                         <th onclick="sortTable(0,'estrelasD')"> ocorreu em:</th>
                     </tr>
@@ -99,30 +137,55 @@
                     {% endfor %}
                 </table>
     {% endif %}
+    </div>
 {% else %}
-    <a>Não foi encontrada nenhuma sugestão válida</a>
+    <a>Para sugestões preencha os campos das bolas ou das estrelas</a>
 {% endif %}
 
  <div style="float: right">
      <table id="epn">
-         <tr>
-             <th>Estrelas por Números</th>
-         </tr>
+
          {% if estrelasPorNumeros %}
-         <tr>
-             <th onclick="sortTable(0,'epn')"> Estrela </th>
-             <th onclick="sortTable(1,'epn')"> Vezes </th>
-         </tr>
-            {% for est,vz in estrelasPorNumeros %}
              <tr>
-                <td> {{ est }} </td>
-                <td>{{ vz }} </td>
+                <th colspan="2">Estrelas por Bolas</th>
+            </tr>
+             <tr>
+                 <th onclick="sortTable(0,'epn')"> Estrela </th>
+                 <th onclick="sortTable(1,'epn')"> Vezes </th>
              </tr>
-            {% endfor %}
+
+             {% for est,vz in estrelasPorNumeros.items %}
+                 <tr>
+                    <td> {{ est }} </td>
+                    <td>{{ vz }} </td>
+                 </tr>
+             {% endfor %}
+
          {% endif %}
      </table>
  </div>
+<div style="float: right">
+     <table id="npe">
 
+         {% if numerosPorEstrelas %}
+             <tr>
+                <th colspan="2">Bolas por Estrelas</th>
+            </tr>
+             <tr>
+                 <th onclick="sortTable(0,'epn')"> Bolas </th>
+                 <th onclick="sortTable(1,'epn')"> Vezes </th>
+             </tr>
+
+             {% for bola,vz in numerosPorEstrelas.items %}
+                 <tr>
+                    <td> {{ bola }} </td>
+                    <td>{{ vz }} </td>
+                 </tr>
+             {% endfor %}
+
+         {% endif %}
+     </table>
+ </div>
 <script type="text/javascript">
 
 function sortTable(n,nomeTabela) {

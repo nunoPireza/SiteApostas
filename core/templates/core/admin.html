@@ -7,14 +7,17 @@
 <body>
 <h1>Administração</h1>
 
-{% if isadmin %}
+
+    {% if isadmin %}
         <form action="{% url 'core:enviarEmail'%}" method="post">
         {% csrf_token %}
          <input style="width: 200px" type="text" value="Assunto" name="email_input">
             <input type="submit" value="Enviar Emails">
         </form>
+        {% if messagesuccess %}
+            <h1>Email enviado com sucesso</h1>
+        {% endif %}
         <br>
-
         <p><a href="{% url 'core:inserirconcurso' %}">Inserir chave do último sorteio</a>. Fechar e abrir sorteios para os apostadores</p>
 
         <a>(Re)Inicializar tabela de resultados a partir de ficheiro .csv</a>
@@ -22,6 +25,7 @@
 
 
 {% endif %}
+
 
 
 
