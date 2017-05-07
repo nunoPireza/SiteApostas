@@ -89,13 +89,12 @@ def loginview(request):
     password = request.POST['password']
     user = authenticate(username=username, password=password)
     context = {}
-    context = {}
     if user is not None:
         login(request, user)
         args = {}
         for each in User._meta.fields:
             args[each.name] = getattr(User, each.name)
-        return render(request, 'core/areacomum.html', args)
+            return HttpResponseRedirect(reverse('core:areacomum'))
 
     else:
         context['noUser'] = True
