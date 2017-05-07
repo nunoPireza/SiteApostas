@@ -62,8 +62,6 @@ def novoRegisto(request):
     fuser.contacto = request.POST['input_contacto']
     if request.POST['input_morada']:
         fuser.morada = request.POST['input_morada']
-    if request.POST['input_iban']:
-        fuser.IBAN = request.POST['input_iban']
     if request.POST['input_pais']:
         fuser.pais = request.POST['input_pais']
 
@@ -164,7 +162,7 @@ def novaaposta(request):
     return render(request, 'core/novaaposta.html')
 
 def gravaAposta(request,concurso_id):
-    concurso = get_object_or_404(Concurso,pk=concurso_id)
+    concurso = get_object_or_404(Sorteio,pk=concurso_id)
     texto=request.POST['aposta']
     #concurso.op
     a=Aposta(concurso,dataAposta=timezone.now(),nome=texto)
@@ -178,6 +176,7 @@ def editardados(request):
 def editRegisto(request):
     if request.user.is_authenticated:
         usr = get_object_or_404(Utilizador, user=request.user.id)
+        cnt = get_object_or_404(Conta, user=request.user.id)
         try:
             if request.POST['snome']:
                 request.user.first_name = request.POST['snome']
@@ -191,7 +190,7 @@ def editRegisto(request):
             if request.POST['scontacto']:
                 usr.contacto = request.POST['scontacto']
             if request.POST['siban']:
-                usr.IBAN = request.POST['siban']
+                cnt.IBAN = request.POST['siban']
             if request.POST['smorada']:
                 usr.morada = request.POST['smorada']
             if request.POST['spais']:
@@ -207,12 +206,50 @@ def editRegisto(request):
     else:
         return HttpResponse("Desculpe. Alguma coisa não funcionou!")
 
+def criarInfoBanc(request):
+    return render(request, 'core/infoBanc.html')
+
+def criarInfoB(request):
+    usr = request.user.id
+    cnt = Conta(IBAN=request.POST['input_iban'], saldo=0.0, premios=0.0, user_id=usr)
+    cnt.save()
+    return HttpResponseRedirect(reverse('core:areapessoal'))
+
+
 @login_required
 def carregarsaldo(request):
     return render(request, 'core/carregarsaldo.html')
 
 def carregaS(request):
-    return render(request, 'core/carregarsaldo.html')
+    #if Conta.objects.filter(user_id=request.user.id.exists()):
+
+
+    usr = request.user.id
+    cnt = Conta(saldo= 0.0, premios = 0.0, user_id =usr)
+    cnt.save()
+    return HttpResponseRedirect(reverse('core:areapessoal'))
+
+'''
+        else:
+            r = get_object_or_404(Conta, pk=request.user.id)
+            if request.POST.get('5e'):
+                r.saldo += 5
+                r.save()
+            elif request.POST.get('10e'):
+                r.saldo += 10
+                r.save()
+            elif request.POST.get('25e'):
+                r.saldo += 25
+                r.save()
+                return HttpResponseRedirect(reverse('core:areapessoal'))
+            else:
+                return HttpResponse('erro')
+
+'''
+
+
+
+
 
 
 def apostar(request):
