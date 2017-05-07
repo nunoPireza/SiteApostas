@@ -5,7 +5,19 @@
     <title>Administração</title>
 </head>
 <body>
-<h1>estou no admin</h1>
+<h1>Administração</h1>
+
+{% if isadmin %}
+        <form action="{% url 'core:enviarEmail'%}" method="post">
+        {% csrf_token %}
+         <input style="width: 200px" type="text" value="Assunto" name="email_input">
+            <input type="submit" value="Enviar Emails">
+        </form>
+        <br>
+{% endif %}
+
+
+
 <li><a href="{% url 'core:homepage' %}"> de volta para homepage</a></li>
 </body>
 </html>

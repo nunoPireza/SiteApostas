@@ -36,6 +36,11 @@ def areacomum(request):
     return render(request, 'core/areacomum.html')
 
 def admin(request):
+    context = {}
+    if request.user.is_authenticated:
+        usr = get_object_or_404(User, user=request.user.id)
+        if usr.username == "admin":
+            context['isadmin']=True
     return render(request, 'core/admin.html')
 
 def novoRegisto(request):
@@ -83,6 +88,7 @@ def loginview(request):
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(username=username, password=password)
+    context = {}
     context = {}
     if user is not None:
         login(request, user)
@@ -247,7 +253,7 @@ def carregaS(request):
 
 
 
-
+@login_required
 def apostar(request):
     return render(request, 'core/apostar.html')
 
@@ -488,6 +494,18 @@ def epn(data,estrelasPorNumeros):
             estrelasPorNumeros[t.estrela] = 1
     return estrelasPorNumeros
 
+def submeteraposta(request):
+    PRECOAPOSTA=2.5
+    if Conta.objects.filter(user_id=request.user.id).exists():
+        conta=Conta.objects.filter(user_id=request.user.id)
+        if conta.saldo>=PRECOAPOSTA:
+            conta.saldo.set(conta.saldo-PRECOAPOSTA)
+
+def inserirconcurso(request):
+    concursoAtivo=Sorteio.objects.filter(activo=True)
+    concursoAtivo=concursoAtivo[0].nSorteio
+    return render(request, 'core/inserirconcurso.html')
+
 def carregarficheiro(request):
     return render(request, 'core/carregarficheiro.html')
 
@@ -536,12 +554,12 @@ def preencheTabelasEstrelas(novasEstrelas, data):
         s.save()
 
 def enviarEmail(request):
-    token = tokens.generate(scope=(), key="some value", salt="None")
-    emaildestino = request.POST['input_email']
-    msg = EmailMessage('Email de confirmação de registo.',
-                       'Bem vindo ao site de Apostos.'
-                       'Caro utilizador, por seu pedido junto enviamos um link para recuperação de password' + token,
-                       settings.EMAIL_HOST_USER, [emaildestino],
+    todosEmails = User.objects.values('email')
+    mensagem = request.POST['email_input']
+    msg = EmailMessage('Informação - Todos os Utilizadores - Site Apostas',
+                       mensagem,
+                       settings.EMAIL_HOST_USER,
+                       [todosEmails],
                        cc=[settings.EMAIL_HOST_USER])
     msg.content_subtype = "html"
     msg.send()

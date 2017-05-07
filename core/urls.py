@@ -34,4 +34,7 @@ urlpatterns = [
     url(r'^apostar/$', views.apostar, name='apostar'),
     url(r'^carregarficheiro/$', views.carregarficheiro, name='carregarficheiro'),
     url(r'^carregaF/$', views.carregaF, name='carregaF'),
+    url(r'^submeteraposta/$', views.submeteraposta, name='submeteraposta'),
+    url(r'^inserirconcurso/$', views.inserirconcurso, name='inserirconcurso'),
+
     ]
