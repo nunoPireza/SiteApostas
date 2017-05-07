@@ -256,64 +256,92 @@ def apostar(request):
 
 @csrf_exempt
 def sugestoes(request):
-    listaSugestoes={}
+    listaSugestoes = {}
+    sugestoesEstrelas={}
     bolasEscolhidas = {}
-    datas=[]
+    estrelasEscolhidas={}
+    estrelasPorNumeros={}
+    numerosPorEstrelas={}
+    datas5 = []
+    datas2 = []
     if request.POST:
-    #se não for na abertura da página (ou refresh)
-        nvazio=set()
+    # se não for na abertura da página (ou refresh)
+        nvazio = set() #para evitar fazer queries com valores repetidos
+        envazio = set() #e poder fazer pop,
         if request.POST['eb1'] is not '':
-            bolasEscolhidas['eb1']=int(request.POST['eb1'])
+            b = int(request.POST['eb1'])
+            bolasEscolhidas['eb1'] = b
             nvazio.add('eb1')
+            dtmp = Bolas.objects.filter(bola=b)
+            for d in dtmp:
+                data= d.ocorrencias
+                estrelasPorNumeros = epn(data, estrelasPorNumeros)
         if request.POST['eb2'] is not '':
-            bolasEscolhidas['eb2']=int(request.POST['eb2'])
+            b = int(request.POST['eb2'])
+            bolasEscolhidas['eb2'] = b
             nvazio.add('eb2')
+            dtmp = Bolas.objects.filter(bola=b)
+            for d in dtmp:
+                data = d.ocorrencias
+                estrelasPorNumeros = epn(data, estrelasPorNumeros)
+
         if request.POST['eb3'] is not '':
-            bolasEscolhidas['eb3']=int(request.POST['eb3'])
+            bolasEscolhidas['eb3'] = int(request.POST['eb3'])
             nvazio.add('eb3')
         if request.POST['eb4'] is not '':
-            bolasEscolhidas['eb4']=int(request.POST['eb4'])
+            bolasEscolhidas['eb4'] = int(request.POST['eb4'])
             nvazio.add('eb4')
         if request.POST['eb5'] is not '':
-            bolasEscolhidas['eb5']=int(request.POST['eb5'])
+            bolasEscolhidas['eb5'] = int(request.POST['eb5'])
             nvazio.add('eb5')
+        if request.POST['ee1'] is not '':
+            estrelasEscolhidas['ee1']=int(request.POST['ee1'])
+            envazio.add('ee1')
+        if request.POST['ee2'] is not '':
+            estrelasEscolhidas['ee2'] = int(request.POST['ee2'])
+            envazio.add('ee2')
 
-        #obter sugestões
-        size=len(bolasEscolhidas)
-        if size==1:#obter duetos
-            b1=bolasEscolhidas.get(nvazio.pop())
-            s1=Bolas.objects.filter(bola=b1)
+        # obter sugestões
+        size = len(bolasEscolhidas)
+        esize = len(envazio)
+        if size ==0:
+         listaSugestoes = getSugestoesBolas()
+
+        if size == 1:  # obter duetos
+            b1 = bolasEscolhidas.get(nvazio.pop())
+            s1 = Bolas.objects.filter(bola=b1)
             for s in s1:
-                d1=s.ocorrencias
-                tmp=(Bolas.objects.filter(ocorrencias=d1).exclude(bola=s.bola).values('bola').annotate(vezes=Count('ocorrencias')))
+                d1 = s.ocorrencias
+                tmp = (Bolas.objects.filter(ocorrencias=d1).exclude(bola=s.bola).values('bola').annotate(
+                    vezes=Count('ocorrencias')))
 
                 for t in tmp:
                     if t.get('bola') in listaSugestoes:
-                        listaSugestoes[t.get('bola')]+= 1
+                        listaSugestoes[t.get('bola')] += 1
                     else:
-                        listaSugestoes[t.get('bola')]=1 #t.get('vezes')
+                        listaSugestoes[t.get('bola')] = 1  # t.get('vezes')
 
- #  Fim de sugestões para Duetos
+
+                        #  Fim de sugestões para Duetos
         if size == 2:  # obter trios
 
             b1 = bolasEscolhidas.get(nvazio.pop())
             b2 = bolasEscolhidas.get(nvazio.pop())
             s1 = Bolas.objects.filter(bola=b1)
 
-
             for s in s1:
                 d1 = s.ocorrencias
-                s2= (Bolas.objects.filter(ocorrencias=d1).filter(bola=b2))
+                s2 = (Bolas.objects.filter(ocorrencias=d1).filter(bola=b2))
                 for j in s2:
-                    d2=j.ocorrencias
-                    tmp=Bolas.objects.filter(ocorrencias=d2).values('bola').exclude(bola=b2).exclude(bola=b1)
+                    d2 = j.ocorrencias
+                    tmp = Bolas.objects.filter(ocorrencias=d2).values('bola').exclude(bola=b2).exclude(bola=b1)
                     for t in tmp:
                         if t.get('bola') in listaSugestoes:
-                            listaSugestoes[t.get('bola')]+= 1
+                            listaSugestoes[t.get('bola')] += 1
                         else:
-                            listaSugestoes[t.get('bola')]=1
+                            listaSugestoes[t.get('bola')] = 1
 
-#Fim de sugestões para Trios
+                            # Fim de sugestões para Trios
         if size == 3:  # obter Quartetos
 
             b1 = bolasEscolhidas.get(nvazio.pop())
@@ -327,18 +355,18 @@ def sugestoes(request):
                 for r2 in q2:
                     d2 = r2.ocorrencias
                     q3 = (Bolas.objects.filter(ocorrencias=d2).filter(bola=b3))
-                    for r3 in q3: #q3 contem as datas onde ocorreram as 3 bolas escolhidas
+                    for r3 in q3:  # q3 contem as datas onde ocorreram as 3 bolas escolhidas
                         d3 = r3.ocorrencias
                         tmp = Bolas.objects.filter(ocorrencias=d3).values('bola').exclude(bola=b2).exclude(
-                        bola=b1).exclude(bola=b3) #obtidas todas as bolas que apareceram nas mesmas datas que forma comums às 3
-                        for t in tmp: # faz a contagem e adiciona á listaSugestões no formato pretendido
+                            bola=b1).exclude(
+                            bola=b3)  # obtidas todas as bolas que apareceram nas mesmas datas que forma comums às 3
+                        for t in tmp:  # faz a contagem e adiciona á listaSugestões no formato pretendido
                             if t.get('bola') in listaSugestoes:
                                 listaSugestoes[t.get('bola')] += 1
                             else:
                                 listaSugestoes[t.get('bola')] = 1
 
-#Fim de sugestões para Quartetos
-
+                                # Fim de sugestões para Quartetos
         if size == 4:  # obter Quintetos
 
             b1 = bolasEscolhidas.get(nvazio.pop())
@@ -355,7 +383,7 @@ def sugestoes(request):
                     q3 = (Bolas.objects.filter(ocorrencias=d2).filter(bola=b3))
                     for r3 in q3:  # q3 contem as datas onde ocorreram as 3 bolas escolhidas
                         d3 = r3.ocorrencias
-                        q4=(Bolas.objects.filter(ocorrencias=d3).filter(bola=b4))
+                        q4 = (Bolas.objects.filter(ocorrencias=d3).filter(bola=b4))
                         for r4 in q4:
                             d4 = r4.ocorrencias
 
@@ -367,10 +395,10 @@ def sugestoes(request):
                                 else:
                                     listaSugestoes[t.get('bola')] = 1
 
-# Fim de sugestões para Quintetos
+                                # Fim de sugestões para Quintetos
 
-#inicio verificar se já saiu chave
-        if size == 5:  # obter Quintetos
+                                # inicio verificar se já saiu chave
+        if size == 5:  # obter datas
 
             b1 = bolasEscolhidas.get(nvazio.pop())
             b2 = bolasEscolhidas.get(nvazio.pop())
@@ -392,22 +420,76 @@ def sugestoes(request):
                         for r4 in q4:
                             d4 = r4.ocorrencias
                             q5 = (
-                            Bolas.objects.filter(ocorrencias=d4).filter(bola=b5))  # datas onde saiu a chave
+                                Bolas.objects.filter(ocorrencias=d4).filter(bola=b5))  # datas onde saiu a chave
                             for d5 in q5:
-                                datas.append(d5.ocorrencias)
+                                datas5.append(d5.ocorrencias)
+        if esize==0:
+         sugestoesEstrelas = getSugestoesEstrelas()
+        if esize==1: # se for selecionada só uma estrela
+            e1=estrelasEscolhidas.get(envazio.pop())
+            s1 = Estrelas.objects.filter(estrela=e1)
+            for s in s1:
+                d1 = s.ocorrencias
+                tmp = (Estrelas.objects.filter(ocorrencias=d1).exclude(estrela=s.estrela).values('estrela').annotate(
+                    vezes=Count('ocorrencias')))
+
+                for t in tmp:
+                    if t.get('estrela') in sugestoesEstrelas:
+                        sugestoesEstrelas[t.get('estrela')] += 1
+                    else:
+                        sugestoesEstrelas[t.get('estrela')] = 1
+
+                        #  Fim de uma estrela escolhida
+        if esize==2: # se 2 estrelas escolher datas
+            e1 = estrelasEscolhidas.get(envazio.pop())
+            e2 = estrelasEscolhidas.get(envazio.pop())
+            q1 = Estrelas.objects.filter(estrela=e1)
+            for r1 in q1:
+                d1 = r1.ocorrencias
+                q2 = Estrelas.objects.filter(estrela=e2).filter(ocorrencias=d1)
+                for r2 in q2:
+                    d2=r2.ocorrencias
+                    datas2.append(d2)
+
+                        #  Fim de 2 estrelas escolhidas
 
 
 
     else:
-        #a listaSugestões poderia ser obtida diretamente de Query? (a tentar)
+        # a listaSugestões poderia ser obtida diretamente de Query? (a tentar)
+        sugestoesEstrelas = getSugestoesEstrelas()
+        listaSugestoes= getSugestoesBolas()
 
-        listaTmp= Bolas.objects.values('bola').annotate(vezes=Count('ocorrencias'))
-        for t in listaTmp:
-            b=t['bola']
-            v=t['vezes']
-            listaSugestoes[b]=v
+    return render(request, 'core/sugestoes.html',
+                  {'sugestoes': listaSugestoes, 'escolhas': bolasEscolhidas, 'data5': datas5, 'estrelasSugeridas':sugestoesEstrelas, 'estrelasEscolhidas':estrelasEscolhidas, 'data2':datas2, 'estrelasPorNumeros':estrelasPorNumeros})
 
-    return render(request, 'core/sugestoes.html', {'lista': listaSugestoes, 'escolhas':bolasEscolhidas, 'data5':datas})
+def getSugestoesEstrelas():
+    sugestoesEstrelas={}
+    listaTmp = Estrelas.objects.values('estrela').annotate(vezes=Count('ocorrencias'))
+    for t in listaTmp:
+        sugestoesEstrelas[t['estrela']] = t['vezes']
+    return    sugestoesEstrelas
+
+def getSugestoesBolas():
+    listaSugestoes={}
+    listaTmp = Bolas.objects.values('bola').annotate(vezes=Count('ocorrencias'))
+    for t in listaTmp:
+        b = t['bola']
+        v = t['vezes']
+        listaSugestoes[b] = v
+    return listaSugestoes
+
+def epn(data,estrelasPorNumeros):
+    # vai procurar as estrelas do dia do sorteio
+    #para juntar ás anteriores
+    epn = Estrelas.objects.filter(ocorrencias=data)
+    for t in epn:
+        #if t.get('estrela') in estrelasPorNumeros:
+        if t.estrela in estrelasPorNumeros:
+            estrelasPorNumeros[t.estrela] += 1
+        else:
+            estrelasPorNumeros[t.estrela] = 1
+    return estrelasPorNumeros
 
 def carregarficheiro(request):
     return render(request, 'core/carregarficheiro.html')
