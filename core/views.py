@@ -39,7 +39,7 @@ def admin(request):
     context = {}
     if request.user.is_authenticated:
         usr = get_object_or_404(User, user=request.user.id)
-        if usr.username == "admin":
+        if usr.is_superuser:
             context['isadmin']=True
     return render(request, 'core/admin.html')
 
@@ -88,13 +88,14 @@ def loginview(request):
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(username=username, password=password)
+
     context = {}
     if user is not None:
         login(request, user)
         args = {}
         for each in User._meta.fields:
             args[each.name] = getattr(User, each.name)
-            return HttpResponseRedirect(reverse('core:areacomum'))
+        return render(request, 'core/areacomum.html', args)
 
     else:
         context['noUser'] = True
@@ -503,7 +504,10 @@ def submeteraposta(request):
 def inserirconcurso(request):
     concursoAtivo=Sorteio.objects.filter(activo=True)
     concursoAtivo=concursoAtivo[0].nSorteio
-    return render(request, 'core/inserirconcurso.html')
+
+
+    return render(request, 'core/inserirconcurso.html', {'concursoAtivo':concursoAtivo})
+
 
 def carregarficheiro(request):
     return render(request, 'core/carregarficheiro.html')
@@ -536,9 +540,6 @@ def carregaF(request):
         preencheTabelasEstrelas(estrelas, data)
 
     return HttpResponse(estrelas)
-    # return HttpResponse("-----"+n+","+str(data)+","+str(bolas)+","+str(estrelas))
-    # return HttpResponse(linhas)
-    # return HttpResponse ("Página de administração")
 
 
 def preencheTabelasBolas(novasBolas, data):
