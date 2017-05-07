@@ -14,6 +14,13 @@
             <input type="submit" value="Enviar Emails">
         </form>
         <br>
+
+        <p><a href="{% url 'core:inserirconcurso' %}">Inserir chave do último sorteio</a>. Fechar e abrir sorteios para os apostadores</p>
+
+        <a>(Re)Inicializar tabela de resultados a partir de ficheiro .csv</a>
+        <p><a href="{% url 'core:carregarficheiro' %}"><button type="button">carregar ficheiro</button></a></p>
+
+
 {% endif %}
 
 

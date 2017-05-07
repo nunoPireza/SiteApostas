@@ -6,7 +6,9 @@
 
 <li><a href="{% url 'core:areapessoal' %}"> ir para areapessoal</a></li>
 <li><a href="{% url 'core:apostar' %}"> apostar</a></li>
-<p><a href="{% url 'core:carregarficheiro' %}"><button type="button">carregar ficheiro</button></a></p>
+ {%  if user.is_superuser %}
+    <li><a href="{% url 'core:admin' %}"> Administradores</a></li>
+ {% endif %}
 <h2>Estatisticas</h2>
 
 <h1>Aqui ficam imagens publicidade!!!</h1>
