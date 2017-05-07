@@ -176,7 +176,7 @@ def editardados(request):
 def editRegisto(request):
     if request.user.is_authenticated:
         usr = get_object_or_404(Utilizador, user=request.user.id)
-        cnt = get_object_or_404(Conta, user=request.user.id)
+        #cnt = get_object_or_404(Conta, user=request.user.id)
         try:
             if request.POST['snome']:
                 request.user.first_name = request.POST['snome']
@@ -189,13 +189,19 @@ def editRegisto(request):
                 usr.NIF = request.POST['snif']
             if request.POST['scontacto']:
                 usr.contacto = request.POST['scontacto']
-            if request.POST['siban']:
-                cnt.IBAN = request.POST['siban']
             if request.POST['smorada']:
                 usr.morada = request.POST['smorada']
             if request.POST['spais']:
                 usr.pais = request.POST['spais']
             usr.save()
+            if request.POST['siban']:
+                if Conta.objects.filter(user_id=request.user.id):
+                    cnt = get_object_or_404(Conta, user=request.user.id)
+                    cnt.IBAN = request.POST['siban']
+                    cnt.save()
+                else:
+                    return HttpResponse('Não existem dados bancários')
+
             #context = {}
             #context['acc'] = acc
             return HttpResponseRedirect(reverse('core:editardados'))
