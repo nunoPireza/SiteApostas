@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^logout/$', auth_views.logout, {'template_name': 'core/logout.html'}, name='logout'),
     url(r'^changepassword/$', views.changePassword, name='changepassword'),
     url(r'^exitMenor$', views.exitMenor, name='exitMenor'),
+    url(r'^idade$', views.idade, name='idade'),
     url(r'^homepage/$', views.homepage, name='homepage'),
     url(r'^areacomum/$', views.areacomum, name='areacomum'),
     url(r'^admin/$', views.admin, name='admin'),

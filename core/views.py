@@ -15,7 +15,7 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.views.decorators.csrf import csrf_exempt
-from datetime import datetime
+from datetime import datetime, date
 from .models import Utilizador, Aposta, Conta, Sorteio, Bolas, Estrelas
 
 
@@ -24,6 +24,19 @@ def inicio(request):
 
 def exitMenor(request):
     return render(request, 'core/exitMenor.html')
+
+def idade(request):
+    #dia = request.POST['dd']
+    #mes = request.POST['mm']
+    ano = int(request.POST['yy'])
+    #date_of_birth = datetime.strptime('dia mes ano', "%d %m %Y")
+    today = date.today()
+    age = today.year - ano
+    if age >= 18:
+
+        return render(request,'core/homepage.html')
+    else:
+        return render(request,'core/exitMenor.html')
 
 def homepage(request):
     if request.user.is_authenticated:
