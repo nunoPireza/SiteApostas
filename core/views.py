@@ -639,39 +639,82 @@ def enviarEmail(request):
 
 def submeterApostas(request):
     # Create the HttpResponse object with the appropriate CSV header.
+    context = {}
+
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="submeterApostas.csv"'
-    sorteioAtual = Sorteio.objects.values('nSorteio').filter(activo=True).order_by('nSorteio').last()
-    sorteioAtual = sorteioAtual['nSorteio']
+    try:
+        sorteioAtual = Sorteio.objects.values('nSorteio').filter(activo=True).order_by('nSorteio').last()
+        sorteioAtual = sorteioAtual['nSorteio']
+        Sorteio.objects.filter(pk=sorteioAtual).update(activo=False)
+    except:
+
+        context['isadmin'] = True
+        context['faildSubmit'] = True
+        return render(request, 'core/admin.html', context)
 
 #    a = Aposta(dataAposta=datetime.now(),nConta_id=1,nSorteio_id=sorteioAtual,bola1=1,bola2=2,bola3=3,bola4=4,bola5=4,estrela1=1,estrela2=8)
  #   a.save()
 
-    Sorteio.objects.filter(pk=sorteioAtual).update(activo=False)
-
     writer = csv.writer(response)
-
     apostaList = Aposta.objects.filter(nSorteio_id=sorteioAtual)
-    writer.writerow(['Concurso','Bola1','Bola2','Bola3','Bola4','Bola5','Estrela1','Estrela2'])
+    writer.writerow(['Sorteio','Bola1','Bola2','Bola3','Bola4','Bola5','Estrela1','Estrela2'])
     for n in apostaList:
         writer.writerow([n.nSorteio_id,n.bola1,n.bola2,n.bola3,n.bola4,n.bola5,n.estrela1,n.estrela2])
 
     return response
 
 '''def distribuipremio:
-    premioMax = Sorteio.objects.values('premio').get(activo=False).order_by('nSorteio').last()
+    #premioMax = Sorteio.objects.values('premio').get(activo=False).order_by('nSorteio').last()
+    premioMax = 200000
     sorteioAtual = Sorteio.objects.values('nSorteio').get(activo=False).order_by('nSorteio').last()
+    sorteioAtual = sorteioAtual['nSorteio']
 
+    #chave de premio
+    chavePremio = {}
     listabolaspremio = []
-    listabolaspremio.append(Sorteio.objects.values('bola1').get(activo=False).order_by('nSorteio').last())
-    listabolaspremio.append(Sorteio.objects.values('bola2').get(activo=False).order_by('nSorteio').last())
-    listabolaspremio.append(Sorteio.objects.values('bola3').get(activo=False).order_by('nSorteio').last())
-    listabolaspremio.append(Sorteio.objects.values('bola4').get(activo=False).order_by('nSorteio').last())
-    listabolaspremio.append(Sorteio.objects.values('bola5').get(activo=False).order_by('nSorteio').last())
-
+    listabolaspremio.append(Sorteio.objects.values('bola1').filter(nSorteio=sorteioAtual))
+    listabolaspremio.append(Sorteio.objects.values('bola2').filter(nSorteio=sorteioAtual))
+    listabolaspremio.append(Sorteio.objects.values('bola3').filter(nSorteio=sorteioAtual))
+    listabolaspremio.append(Sorteio.objects.values('bola4').filter(nSorteio=sorteioAtual))
+    listabolaspremio.append(Sorteio.objects.values('bola5').filter(nSorteio=sorteioAtual))
     listaestrelaspremio = []
-    listaestrelaspremio.append(Sorteio.objects.values('estrela1').get(activo=False).order_by('nSorteio').last())
-    listaestrelaspremio.append(Sorteio.objects.values('estrela2').get(activo=False).order_by('nSorteio').last())'''
+    listaestrelaspremio.append(Sorteio.objects.values('estrela1').filter(nSorteio=sorteioAtual))
+    listaestrelaspremio.append(Sorteio.objects.values('estrela2').filter(nSorteio=sorteioAtual))
+    chavePremio['bolas']= listabolaspremio
+    chavePremio['estrelas']= listaestrelaspremio
+
+    #chaves jogadas - dicionario  {'contaId': nConta_id, 'listaBolasAposta':[lista de bolas], 'listaEstrelasAposta: [lista de estrelas]}
+    chavesjogadas = {}
+    listaApostaporSorteio = Aposta.objects.filter(nSorteio_id=sorteioAtual)
+    listaContaId = []
+    chavesjogadas['contaId'] = listaContaId
+    listabolasAposta = []
+    chavesjogadas['listaBolasAposta'] = listabolasAposta
+    listaestrelasAposta = []
+    chavesjogadas['listaEstrelasAposta'] = listaestrelasAposta
+
+    for contaId in listaApostaporSorteio:
+        #preencher contaID
+        listaContaId.append((contaId.nConta_id))
+
+        #preecher lista de bolas
+        listabolasAposta.append(contaId.bola1)
+        listabolasAposta.append(contaId.bola2)
+        listabolasAposta.append(contaId.bola3)
+        listabolasAposta.append(contaId.bola4)
+        listabolasAposta.append(contaId.bola5)
+
+        #preecher lista de estrelas
+        listaestrelasAposta.append(contaId.estrela1)
+        listaestrelasAposta.append(contaId.estrela2)
 
 
+        #averiguar premios por contaId
+        listaPremios = []
+        for linha in chavesjogadas:
+            for i in range(4):
+                if linha['listaBolasAposta'][i] == listabolaspremio[i]:
+                    
+                    '''
 
