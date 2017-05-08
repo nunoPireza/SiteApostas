@@ -25,8 +25,16 @@ class Conta(models.Model):
 class Sorteio(models.Model):
     nSorteio=models.PositiveSmallIntegerField(primary_key=True)
     dataSorteio=models.DateField(auto_now=False, auto_now_add=False)
-    bolas =models.PositiveSmallIntegerField()
-    estrelas =models.PositiveSmallIntegerField()
+
+    bola1 = models.PositiveSmallIntegerField(null=True, blank=True)
+    bola2 = models.PositiveSmallIntegerField(null=True, blank=True)
+    bola3 = models.PositiveSmallIntegerField(null=True, blank=True)
+    bola4 = models.PositiveSmallIntegerField(null=True, blank=True)
+    bola5 = models.PositiveSmallIntegerField(null=True, blank=True)
+
+    estrela1 = models.PositiveSmallIntegerField(null=True, blank=True)
+    estrela2 = models.PositiveSmallIntegerField(null=True, blank=True)
+
     activo=models.BooleanField(default=False)
 
     def __str__(self):
