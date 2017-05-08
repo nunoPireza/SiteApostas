@@ -1,4 +1,4 @@
-import os
+import os,csv
 from access_tokens import tokens
 from django.core.mail import EmailMessage
 from django.shortcuts import render, get_object_or_404, HttpResponse, HttpResponseRedirect, redirect
@@ -623,3 +623,42 @@ def enviarEmail(request):
         return render(request, 'core/admin.html', context)
     else:
         return render(request, 'core/areacomum.html')
+
+def submeterApostas(request):
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="submeterApostas.csv"'
+    sorteioAtual = Sorteio.objects.values('nSorteio').filter(activo=True).order_by('nSorteio').last()
+    sorteioAtual = sorteioAtual['nSorteio']
+
+#    a = Aposta(dataAposta=datetime.now(),nConta_id=1,nSorteio_id=sorteioAtual,bola1=1,bola2=2,bola3=3,bola4=4,bola5=4,estrela1=1,estrela2=8)
+ #   a.save()
+
+    Sorteio.objects.filter(pk=sorteioAtual).update(activo=False)
+
+    writer = csv.writer(response)
+
+    apostaList = Aposta.objects.filter(nSorteio_id=sorteioAtual)
+    writer.writerow(['Concurso','Bola1','Bola2','Bola3','Bola4','Bola5','Estrela1','Estrela2'])
+    for n in apostaList:
+        writer.writerow([n.nSorteio_id,n.bola1,n.bola2,n.bola3,n.bola4,n.bola5,n.estrela1,n.estrela2])
+
+    return response
+
+'''def distribuipremio:
+    premioMax = Sorteio.objects.values('premio').get(activo=False).order_by('nSorteio').last()
+    sorteioAtual = Sorteio.objects.values('nSorteio').get(activo=False).order_by('nSorteio').last()
+
+    listabolaspremio = []
+    listabolaspremio.append(Sorteio.objects.values('bola1').get(activo=False).order_by('nSorteio').last())
+    listabolaspremio.append(Sorteio.objects.values('bola2').get(activo=False).order_by('nSorteio').last())
+    listabolaspremio.append(Sorteio.objects.values('bola3').get(activo=False).order_by('nSorteio').last())
+    listabolaspremio.append(Sorteio.objects.values('bola4').get(activo=False).order_by('nSorteio').last())
+    listabolaspremio.append(Sorteio.objects.values('bola5').get(activo=False).order_by('nSorteio').last())
+
+    listaestrelaspremio = []
+    listaestrelaspremio.append(Sorteio.objects.values('estrela1').get(activo=False).order_by('nSorteio').last())
+    listaestrelaspremio.append(Sorteio.objects.values('estrela2').get(activo=False).order_by('nSorteio').last())'''
+
+
+

@@ -23,7 +23,7 @@ class Conta(models.Model):
         return self.id
 
 class Sorteio(models.Model):
-    nSorteio=models.PositiveSmallIntegerField(primary_key=True)
+    nSorteio=models.PositiveIntegerField(primary_key=True)
     dataSorteio=models.DateField(auto_now=False, auto_now_add=False)
 
     bola1 = models.PositiveSmallIntegerField(null=True, blank=True)
@@ -38,7 +38,7 @@ class Sorteio(models.Model):
     activo=models.BooleanField(default=False)
 
     def __str__(self):
-        return self.id
+        return self.nSorteio
 
     def sorteio_valido(self):
         return self.dataSorteio >= timezone.now() - datetime.timedelta(days=1)
@@ -56,8 +56,13 @@ class Aposta(models.Model):
     nSorteio = models.ForeignKey(Sorteio, on_delete=models.CASCADE)
     nConta = models.ForeignKey(Conta, on_delete=models.CASCADE)
     dataAposta = models.DateTimeField('dataaposta')
-    bolas = models.PositiveSmallIntegerField()
-    estrelas = models.PositiveSmallIntegerField()
+    bola1 = models.PositiveSmallIntegerField()
+    bola2 = models.PositiveSmallIntegerField()
+    bola3 = models.PositiveSmallIntegerField()
+    bola4 = models.PositiveSmallIntegerField()
+    bola5 = models.PositiveSmallIntegerField()
+    estrela1 = models.PositiveSmallIntegerField()
+    estrela2 = models.PositiveSmallIntegerField()
 
     def __str__(self):
         return self.id

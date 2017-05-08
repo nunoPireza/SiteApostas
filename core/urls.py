@@ -36,5 +36,6 @@ urlpatterns = [
     url(r'^carregaF/$', views.carregaF, name='carregaF'),
     url(r'^submeteraposta/$', views.submeteraposta, name='submeteraposta'),
     url(r'^inserirconcurso/$', views.inserirconcurso, name='inserirconcurso'),
-
+    url(r'^createFile/$', views.submeterApostas, name='submeterApostas'),
+    #url(r'^distribuipremio/$', views.distribuipremio, name='distribuipremio'),
     ]
