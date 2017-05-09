@@ -1,0 +1,3 @@
+https://startbootstrap.com/ - navbar
+http://www.designstub.com/projects/mount-age-verification-splash-page/ - age verification
+https://dcrazed.com/css-html-login-form-templates/ - login

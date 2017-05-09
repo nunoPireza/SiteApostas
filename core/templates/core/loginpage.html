@@ -1,18 +1,35 @@
-{% block content %}
-  <h2>Entrar no site</h2>
-  {% if form.errors %}
-    <p style="color: red">O username e a password não foram encontradas. Tenta outra vez.</p>
-  {% endif %}
-  <form method="post" action="{% url 'core:loginview' %}">
-    {% csrf_token %}
-  <p>Username :  <input type="text" autocomplete="off" name="username"></p>
-  <p>Password :  <input type="password" autocomplete="off" name="password"></p>
-      {% if noUser %}
-      Login sem sucesso. Tente novamente.
-      {% endif %}
-<br><br>
-<input type="submit" value="entrar">
-  <a href="{% url 'core:registo' %}">Novo na página? Regista-te</a><br>
+{% load static %}
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Site de Apostas</title>
 
-  </form>
-{% endblock %}
+
+
+      <link rel="stylesheet" href="{% static 'css/style.css'%}">
+
+
+</head>
+
+<body>
+  <div class="login-page">
+  <div class="form">
+    <form class="login-form" method="post" action="{% url 'core:loginview' %}">
+        {% csrf_token %}
+      <input type="text" autocomplete="off" name="username"/>
+      <input type="password" autocomplete="off" name="password"/>
+      <button>Entrar</button>
+      <p class="message">Novo na página? <a href="{% url 'core:registo' %}">Regista-te</a></p>
+    </form>
+    {% if form.errors %}
+        <p style="color: red">O username e a password não foram encontradas. Tenta outra vez.</p>
+    {% endif %}
+  </div>
+</div>
+  <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
+    <script src="{% static 'js/index.js'%}"></script>
+
+</body>
+</html>
