@@ -9,25 +9,52 @@
 
 
     {% if isadmin %}
-        <form action="{% url 'core:enviarEmail'%}" method="post">
-        {% csrf_token %}
-         <input style="width: 200px" type="text" value="Assunto" name="email_input">
-            <input type="submit" value="Enviar Emails">
-        </form>
-        {% if messagesuccess %}
-            <h1>Email enviado com sucesso</h1>
-        {% endif %}
-        <br>
-        <p><a href="{% url 'core:inserirconcurso' %}">Inserir chave do último sorteio</a>. Fechar e abrir sorteios para os apostadores</p>
+        <table style="width:100%;border: 1px solid black;">
+            <tr >
+                <th style="border: 1px solid black">
+                    <h3>Envio de emails informativos</h3>
+                    <form action="{% url 'core:enviarEmail'%}" method="post">
+                        {% csrf_token %}
+                        <input style="width: 200px" type="text" value="Assunto" name="email_input">
+                        <input type="submit" value="Enviar Emails">
+                    </form>
+                    {% if messagesuccess %}
+                        <h1>Email enviado com sucesso</h1>
+                    {% endif %}
+                </th>
+            </tr>
 
-        <a>(Re)Inicializar tabela de resultados a partir de ficheiro .csv</a>
-        <p><a href="{% url 'core:carregarficheiro' %}"><button type="button">carregar ficheiro</button></a></p>
+            <tr>
+                <th style="border: 1px solid black">
+                    <p><a href="{% url 'core:inserirconcurso' %}">Inserir chave do último sorteio</a>. Fechar e abrir sorteios para os apostadores</p>
+                    <a>(Re)Inicializar tabela de resultados a partir de ficheiro .csv</a>
+                    <p><a href="{% url 'core:carregarficheiro' %}"><button type="button">carregar ficheiro</button></a></p>
+                </th>
+            </tr>
+            <tr>
+                <th style="border: 1px solid black">
+                     <p><a href="{% url 'core:submeterApostas' %}"><button type="button">Submeter Apostas</button></a></p>
+                    {% if faildSubmit %}
+                        <h1>Apostas não submetidas</h1>
+
+                    {% endif %}
+                </th>
+            </tr>
+            <tr>
+                <th style="border: 1px solid black">
+
+                </th>
+
+            </tr>
+
+
+
+
+
+        </table>
 
 
 {% endif %}
-
-
-
 
 <li><a href="{% url 'core:homepage' %}"> de volta para homepage</a></li>
 </body>
