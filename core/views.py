@@ -24,7 +24,7 @@ def inicio(request):
 
 def exitMenor(request):
     return render(request, 'core/exitMenor.html')
-
+'''
 def idade(request):
     #dia = request.POST['dd']
     #mes = request.POST['mm']
@@ -37,6 +37,22 @@ def idade(request):
         return render(request,'core/homepage.html')
     else:
         return render(request,'core/exitMenor.html')
+'''
+
+
+def idade(request):
+    now = datetime.now()
+    a = int(request.POST['yy'])
+    m = int(request.POST['mm'])
+    d = int(request.POST['dd'])
+    anoa = now.year
+    mesa = now.month
+    diaa = now.day
+    age = (anoa - a) - ((mesa, diaa) < (m, d))
+    if age >= 18:
+        return render(request, 'core/homepage.html')
+    else:
+        return render(request, 'core/exitMenor.html')
 
 def homepage(request):
     if request.user.is_authenticated:
