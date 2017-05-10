@@ -35,7 +35,9 @@ def idade(request):
     mesa = now.month
     diaa = now.day
     age = (anoa - a) - ((mesa, diaa) < (m, d))
-    if age >= 18:
+    if age >= 18 and request.user.is_authenticated:
+        return render(request, 'core/areacomum.html')
+    elif age >= 18 and request.user.is_anonymous:
         return render(request, 'core/homepage.html')
     else:
         return render(request, 'core/exitMenor.html')
