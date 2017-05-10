@@ -16,6 +16,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime, date
+from django.contrib import messages
 from .models import Utilizador, Aposta, Conta, Sorteio, Bolas, Estrelas
 
 
@@ -24,21 +25,6 @@ def inicio(request):
 
 def exitMenor(request):
     return render(request, 'core/exitMenor.html')
-'''
-def idade(request):
-    #dia = request.POST['dd']
-    #mes = request.POST['mm']
-    ano = int(request.POST['yy'])
-    #date_of_birth = datetime.strptime('dia mes ano', "%d %m %Y")
-    today = date.today()
-    age = today.year - ano
-    if age >= 18:
-
-        return render(request,'core/homepage.html')
-    else:
-        return render(request,'core/exitMenor.html')
-'''
-
 
 def idade(request):
     now = datetime.now()
@@ -238,6 +224,7 @@ def editRegisto(request):
             if request.POST['spais']:
                 usr.pais = request.POST['spais']
             usr.save()
+            messages.success(request, 'User atualizado')
             if request.POST['siban']:
                 if Conta.objects.filter(user_id=request.user.id):
                     cnt = get_object_or_404(Conta, user=request.user.id)
@@ -272,7 +259,7 @@ def carregarsaldo(request):
 
 def carregaS(request):
     if Conta.objects.filter(user_id=request.user.id).exists():
-        r = get_object_or_404(Conta, pk=request.user.id)
+        r = get_object_or_404(Conta, user_id=request.user.id)
         if request.POST.get('5e'):
             r.saldo += 5
             r.save()

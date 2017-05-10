@@ -1,0 +1,120 @@
+{% load static %}
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>NOVO REGISTO</title>
+      <link rel="stylesheet" href="{% static 'css/regis.css'%}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ie10-viewport-bug-workaround.css'%}">
+
+    <script type="text/javascript" src="{% static 'js/ie-emulation-modes-warning.js'%}"></script>
+</head>
+<body>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+<div class="container-fluid">
+	<form action="{% url 'core:novoRegisto'%}" class="register-form" method="post">		
+	 {% csrf_token %}
+      <div class="row">      
+           <div class="col-md-4 col-sm-4 col-lg-4">
+              <label for="firstName">NOME</label>
+			  <input type="text" placeholder="Nome" name="input_name" class="form-control" required/>                  
+           </div>            
+      </div>
+	  <div class="row">      
+           <div class="col-md-4 col-sm-4 col-lg-4">
+              <label for="lastName">APELIDO</label>
+			  <input type="text" placeholder="Apelido" name="input_surname" class="form-control" required/> 		
+           </div>            
+      </div>
+	  <div class="row">      
+           <div class="col-md-4 col-sm-4 col-lg-4">
+              <label for="username">USERNAME</label>
+			  <input type="text" autocomplete="off" placeholder="Username" name="input_username" class="form-control" required/>			  
+           </div>            
+      </div>
+	   {% if same_user %}
+                <strong>Já existe um utilizador com este Username</strong>
+       {%  elif same_email %}
+                 <strong>Já existe um utilizador com este email</strong>
+       {% endif %}
+	  
+      <div class="row">
+           <div class="col-md-4 col-sm-4 col-lg-4">
+              <label for="email">EMAIL</label>               
+			  <input class="form-control" type="email" placeholder="Email" name="input_email" required/>	
+           </div>            
+      </div>
+	  
+	  <div class="row">
+           <div class="col-md-4 col-sm-4 col-lg-4">
+              <label for="nif">NIF</label>
+			  <input class="form-control" type="number" placeholder="NIF" name="input_nif" required />	
+           </div>            
+      </div>
+	  {% if nifgreater %}
+                <strong>NIF com 9 digitos</strong>
+      {%  endif %}
+	  
+	   <div class="row">
+           <div class="col-md-4 col-sm-4 col-lg-4">
+              <label for="contato">CONTATO</label>
+			  <input class="form-control" type="number" placeholder="Contacto" name="input_contacto" required/>	
+           </div>            
+      </div>
+	  {%  if contactogreater %}
+                <strong>Contacto com 9 digitos</strong>
+      {%  endif %}
+	  
+	   <div class="row">
+           <div class="col-md-4 col-sm-4 col-lg-4">
+              <label for="morada">MORADA</label>
+			  <input class="form-control" type="text" placeholder="Morada" name="input_morada"/>
+           </div>            
+      </div>
+	  <div class="row">
+           <div class="col-md-4 col-sm-4 col-lg-4">
+              <label for="pais">PAÍS</label>
+			  <input class="form-control" type="text" placeholder="País" name="input_pais"/>
+           </div>            
+      </div>
+      <div class="row">
+           <div class="col-md-4 col-sm-4 col-lg-4">
+              <label for="password">PASSWORD</label>
+              <input class="form-control" type="password" autocomplete="off" placeholder="Password" name="input_password" pattern=".{5,}" title="Password com 8 caracteres obrigatórios." required/></p>
+           </div>            
+      </div>
+      <hr>
+      <div class="row">
+           <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+           <button type="submit" class="btn btn-default regbutton">REGISTO</button>
+           
+          </div>
+          <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+           <button type="reset" class="btn btn-default logbutton" value="Reset">Apagar dados</button>           
+          </div>          
+      </div>
+<a href="{% url 'core:areacomum' %}"><button type="button">Voltar a homepage</button></a></p>	  
+    </form>
+</div>
+    <!-- jQuery -->
+    <script src="{% static 'js/jquery.js'%}"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js'%}"></script>
+<script type="text/javascript" src="{% static 'js/ie10-viewport-bug-workaround.js'%}"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

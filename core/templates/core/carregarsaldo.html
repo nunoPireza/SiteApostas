@@ -1,7 +1,10 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
 
 <p>Tens na tua conta {{ user.conta.saldo }} Euros</p>
 
-<form action="{% url 'core:carregaS'%}" enctype="multipart/form-data" method="post">
+<form action="{% url 'core:carregaS'%}" enctype="multipart/form-data" method="POST">
     {% csrf_token %}
 
     <button type="submit" name="5e" value="Submit">5€</button>
@@ -17,3 +20,4 @@ dinheiro à conta automaticamente
 
 <a href="{% url 'core:areapessoal'%}">Ir para Área Pessoal</a><br>
 </br>
+{% endblock %}

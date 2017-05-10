@@ -1,3 +1,8 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
 <h1>Edite os seus dados pessoais </h1>
     <form action="{% url 'core:editRegisto'%}" method="post">
         {% csrf_token %}
@@ -5,10 +10,10 @@
         <p>Apelido :  <input type="text" name="sapelido" placeholder="{{ user.last_name }}"> </p>
 
         <p>Email :  <input type="email" name="semail" placeholder="{{ user.email }}"> </p>
-        <p>IBAN :  <input type="number" name="siban" placeholder="{{ user.conta.IBAN}}"> </p>
+        <p>IBAN :  <input type="number" name="siban" placeholder="{{ user.conta.IBAN}}" maxlength="23"> </p>
 
-        <p>NIF :  <input type="number" name="snif" placeholder="{{ user.utilizador.NIF }}"> </p>
-        <p>Contacto :  <input type="number" name="scontacto" placeholder="{{ user.utilizador.contacto }}"> </p>
+        <p>NIF :  <input type="number" name="snif" placeholder="{{ user.utilizador.NIF }}" maxlength="9"> </p>
+        <p>Contacto :  <input type="number" name="scontacto" placeholder="{{ user.utilizador.contacto }}" maxlength="9"> </p>
 
         <p>Morada :  <input type="text" name="smorada" placeholder="{{ user.utilizador.morada }}"> </p>
 
@@ -19,3 +24,13 @@
 <p><a href="{% url 'core:areacomum' %}"><button type="button">Voltar a homepage</button></a></p>
 
 <a href="{% url 'core:areapessoal'%}">Ir para Área Pessoal</a><br>
+
+
+    {% if messages %}
+		<ul class='messages'>
+			{% for message in messages %}
+				<li class="{{ message.tags }}">{{ message }}</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+{% endblock %}
