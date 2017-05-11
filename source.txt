@@ -1,3 +1,4 @@
 https://startbootstrap.com/ - navbar
 http://www.designstub.com/projects/mount-age-verification-splash-page/ - age verification
-https://dcrazed.com/css-html-login-form-templates/ - login
+https://dcrazed.com/css-html-login-form-templates/ - login e reaproveitei para o registo
+https://www.tailorbrands.com/ - criação do logo

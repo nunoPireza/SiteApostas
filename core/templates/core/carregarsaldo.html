@@ -2,22 +2,22 @@
 {% load static %}
 {% block content %}
 
-<p>Tens na tua conta {{ user.conta.saldo }} Euros</p>
+    <div class="container">
+        <br>
+        <h1>Tens na tua conta {{ user.conta.saldo }} Euros</h1>
+        <br>
 
-<form action="{% url 'core:carregaS'%}" enctype="multipart/form-data" method="POST">
-    {% csrf_token %}
+        <div class="container">
+        <h3>Carregar Saldo em Conta</h3>
 
-    <button type="submit" name="5e" value="Submit">5€</button>
-    <button type="submit" name="10e" value="Submit">10€</button>
-    <button type="submit" name="25e" value="Submit">25€</button>
-</form>
+        <form action="{% url 'core:carregaS'%}" enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
 
+            <button type="submit" name="5e" value="Submit">5€</button>
+            <button type="submit" name="10e" value="Submit">10€</button>
+            <button type="submit" name="25e" value="Submit">25€</button>
+        </form>
+        </div>
+    </div>
 
-<p>Aqui teremos uma lista com 3 opções de carregamento que o utilizador carregando acrescenta
-dinheiro à conta automaticamente
-    (no real deveria gerar referência multibanco e após verificação de conta entrava no saldo)
-</p>
-
-<a href="{% url 'core:areapessoal'%}">Ir para Área Pessoal</a><br>
-</br>
 {% endblock %}

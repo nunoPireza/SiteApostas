@@ -35,7 +35,9 @@ def idade(request):
     mesa = now.month
     diaa = now.day
     age = (anoa - a) - ((mesa, diaa) < (m, d))
-    if age >= 18:
+    if age >= 18 and request.user.is_authenticated:
+        return render(request, 'core/areacomum.html')
+    elif age >= 18 and request.user.is_anonymous:
         return render(request, 'core/homepage.html')
     else:
         return render(request, 'core/exitMenor.html')
@@ -53,6 +55,7 @@ def areacomum(request):
     context = {'ultimoSorteio': ultimoSorteio, 'apostasporsorteio': apostasporsorteio}  # dicionário de contexto
     return render(request, 'core/areacomum.html', context)
 
+@login_required
 def admin(request):
     context = {}
     if User.is_superuser:
@@ -105,10 +108,11 @@ def novoRegisto(request):
     send_mail(titulo, mensagem, settings.EMAIL_HOST_USER, [emaildestino,settings.EMAIL_HOST_USER], fail_silently=True)
     return render(request, 'core/homepage.html')
 
-
+@login_required
 def registo(request):
     return render(request, 'core/registo.html')
 
+@login_required
 def loginpage(request):
     return render(request, 'core/loginpage.html')
 
@@ -129,6 +133,7 @@ def loginview(request):
         context['noUser'] = True
         return render(request, "core/loginpage.html", context)
 
+@login_required
 def logoutview(request):
     logout(request)
     return render(request, 'core/homepage.html')
@@ -178,6 +183,7 @@ def apostar(request):
 def areapessoal(request):
     return render(request, 'core/areapessoal.html')
 
+@login_required
 def mostrardados(request):
     return render(request, 'core/mostrardados.html')
 
@@ -246,6 +252,7 @@ def editRegisto(request):
     else:
         return HttpResponse("Desculpe. Alguma coisa não funcionou!")
 
+@login_required
 def criarInfoBanc(request):
     return render(request, 'core/infoBanc.html')
 
@@ -275,11 +282,6 @@ def carregaS(request):
         return HttpResponseRedirect(reverse('core:carregarsaldo'))
     else:
         return HttpResponseRedirect(reverse('core:criarInfoBanc'))
-
-
-
-
-
 
 
 @login_required

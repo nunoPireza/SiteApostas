@@ -62,6 +62,12 @@
                         </li>
                     {% endif %}
 
+                     {% if user.is_authenticated %}
+                        <li>
+                            <a href="{% url 'core:areapessoal' %}">Minha Conta</a>
+                        </li>
+                     {% endif %}
+
                     {% if user.is_authenticated %}
                         <li>
                             <a href="{% url 'core:logoutview' %}">Sair</a>
@@ -80,13 +86,21 @@
             </div>
             <!-- /.navbar-collapse -->
         </div>
-        <!-- /.container -->
     </nav>
+        <!-- /.container -->
+
+    <body>
+
+
 
     <!-- Page Content -->
         {% block content %}
         {% endblock %}
     <!-- /.container -->
+
+
+    </body>
+
 
     <!-- jQuery -->
     <script src="{% static 'js/jquery.js'%}"></script>

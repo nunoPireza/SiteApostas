@@ -9,17 +9,22 @@
     <title>Novo Registo</title>
 </head>
 <body>
-<h1> Atualize a sua conta</h1>
+<div class="container">
+    {% if user.conta.IBAN != None %}
+        <p>Já tem IBAN {{ user.conta.IBAN }} associado à sua conta, caso pretenda alterar por favor tente
+        <a href="{% url 'core:editardados'%}">Atualizar Dados Conta</a></p>
+    {% else %}
+        <h1> Atualize a sua conta</h1>
 
-    <form action="{% url 'core:criarInfoB'%}" method="post">
-        {% csrf_token %}
+        <form action="{% url 'core:criarInfoB'%}" method="post">
+            {% csrf_token %}
 
-        <p><strong>IBAN :  </strong><input type="number" placeholder="IBAN" name="input_iban"/></p>
+            <p><strong>IBAN :  </strong><input type="number" placeholder="IBAN" name="input_iban"/></p>
 
-        <br><input type="submit" value="Registar"/>&nbsp;&nbsp;<button type="reset" value="Reset">Apagar Valores</button>
-    </form>
-
-<p><a href="{% url 'core:areapessoal' %}"><button type="button">Voltar a area pessoal</button></a></p>
+            <br><input type="submit" value="Registar"/>&nbsp;&nbsp;<button type="reset" value="Reset">Apagar Valores</button>
+        </form>
+    {% endif %}
+</div>
 
 </body>
 </html>

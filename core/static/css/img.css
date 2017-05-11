@@ -1,0 +1,15 @@
+body, html {
+
+	background-repeat: no-repeat;
+	background-image: url(../images/bg1.jpg);
+	background-size: cover;
+}
+
+h1{
+    font-weight: 450;
+    line-height: 1.1;
+    color: #FFFFFF;
+    font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+    src: url(../fonts/glyphicons-halflings-regular.svg);
+
+}
