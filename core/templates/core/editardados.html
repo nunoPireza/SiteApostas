@@ -2,35 +2,36 @@
 {% load static %}
 {% block content %}
 
-
-<h1>Edite os seus dados pessoais </h1>
-    <form action="{% url 'core:editRegisto'%}" method="post">
+    <div class="container">
+        <h1>Edite os seus dados pessoais </h1>
+        <form action="{% url 'core:editRegisto'%}" method="post">
         {% csrf_token %}
-        <p>Nome :  <input type="text" name="snome" placeholder="{{ user.first_name }}"> </p>
-        <p>Apelido :  <input type="text" name="sapelido" placeholder="{{ user.last_name }}"> </p>
+            <p>Nome :  <input type="text" name="snome" placeholder="{{ user.first_name }}"> </p>
+            <p>Apelido :  <input type="text" name="sapelido" placeholder="{{ user.last_name }}"> </p>
 
-        <p>Email :  <input type="email" name="semail" placeholder="{{ user.email }}"> </p>
-        <p>IBAN :  <input type="number" name="siban" placeholder="{{ user.conta.IBAN}}" maxlength="23"> </p>
+            <p>Email :  <input type="email" name="semail" placeholder="{{ user.email }}" size="22"> </p>
+            <p>IBAN :  <input type="number" name="siban" placeholder="{{ user.conta.IBAN}}" maxlength="23"> </p>
 
-        <p>NIF :  <input type="number" name="snif" placeholder="{{ user.utilizador.NIF }}" maxlength="9"> </p>
-        <p>Contacto :  <input type="number" name="scontacto" placeholder="{{ user.utilizador.contacto }}" maxlength="9"> </p>
+            <p>NIF :  <input type="number" name="snif" placeholder="{{ user.utilizador.NIF }}" maxlength="9"> </p>
+            <p>Contacto :  <input type="number" name="scontacto" placeholder="{{ user.utilizador.contacto }}" maxlength="9"> </p>
 
-        <p>Morada :  <input type="text" name="smorada" placeholder="{{ user.utilizador.morada }}"> </p>
+            <p>Morada :  <input type="text" name="smorada" placeholder="{{ user.utilizador.morada }}"> </p>
 
-        <p>País :  <input type="text" name="spais" placeholder="{{ user.utilizador.pais }}"></p>
+            <p>País :  <input type="text" name="spais" placeholder="{{ user.utilizador.pais }}"></p>
 
             <br><input type="submit" value="Salvar">&nbsp;&nbsp;
-    </form>
-<p><a href="{% url 'core:areacomum' %}"><button type="button">Voltar a homepage</button></a></p>
+        </form>
+            <p><a href="{% url 'core:areacomum' %}"><button type="button">Voltar a homepage</button></a></p>
 
-<a href="{% url 'core:areapessoal'%}">Ir para Área Pessoal</a><br>
+            <a href="{% url 'core:areapessoal'%}">Ir para Área Pessoal</a><br>
 
 
-    {% if messages %}
-		<ul class='messages'>
-			{% for message in messages %}
+        {% if messages %}
+		    <ul class='messages'>
+                {% for message in messages %}
 				<li class="{{ message.tags }}">{{ message }}</li>
 			{% endfor %}
-		</ul>
-	{% endif %}
+		    </ul>
+	    {% endif %}
+    </div>
 {% endblock %}

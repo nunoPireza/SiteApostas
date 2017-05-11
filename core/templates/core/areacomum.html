@@ -35,20 +35,22 @@
 
     <script type="text/javascript" src="{% static 'js/ie-emulation-modes-warning.js'%}"></script>
 </head>
-    <body>
+
+<body>
+    <div class="container">
 
 
-<h1>Bem vindo ao site de Apostas, Está na área comum</h1>
+        <h1>Bem vindo ao site de Apostas, Está na área comum</h1>
 
-<li><a href="{% url 'core:areapessoal' %}"> ir para areapessoal</a></li>
-<li><a href="{% url 'core:apostar' %}"> apostar</a></li>
- {%  if user.is_superuser %}
-    <li><a href="{% url 'core:admin' %}"> Administradores</a></li>
- {% endif %}
-<h2>Estatisticas</h2>
+        <li><a href="{% url 'core:areapessoal' %}"> ir para areapessoal</a></li>
+        <li><a href="{% url 'core:apostar' %}"> apostar</a></li>
+        {%  if user.is_superuser %}
+            <li><a href="{% url 'core:admin' %}"> Administradores</a></li>
+        {% endif %}
+        <h2>Estatisticas</h2>
 
-<h1>Aqui ficam imagens publicidade!!!</h1>
-
+        <h1>Aqui ficam imagens publicidade!!!</h1>
+    <div>
         <script src="{% static 'js/jquery.js'%}"></script>
 
     <!-- Bootstrap Core JavaScript -->

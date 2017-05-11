@@ -8,34 +8,39 @@
     <meta charset="UTF-8">
     <title>Personal Page</title>
 </head>
+
 <body>
-<h1>Bem vindo, {{ user.get_full_name }} !</h1>
-<ul>
-    {{ user.email }}
-</ul>
+    <div class="container">
+        <h1>Bem vindo, {{ user.get_full_name }} !</h1>
+
+        <ul>
+            {{ user.email }}
+        </ul>
 
 
-<li><a href="{% url 'core:changepassword' %}"> mudar pass</a></li>
+        <li><a href="{% url 'core:changepassword' %}"> mudar pass</a></li>
+        </br>
 
-<a href="{% url 'core:mostrardados'%}">Mostrar Dados Pessoais</a><br>
-</br>
+        <a href="{% url 'core:mostrardados'%}">Mostrar Dados Pessoais</a><br>
+        </br>
 
-<a href="{% url 'core:editardados'%}">Editar Dados Pessoais</a><br>
-</br>
+        <a href="{% url 'core:editardados'%}">Editar Dados Pessoais</a><br>
+        </br>
 
-<a href="{% url 'core:criarInfoBanc'%}">Editar os dados bancários</a><br>
-</br>
+        <a href="{% url 'core:criarInfoBanc'%}">Editar os dados bancários</a><br>
+        </br>
 
-<h2>Tabela com histórico de apostas</h2><br>
-</br>
+        <h2>Tabela com histórico de apostas</h2><br>
+        </br>
 
-<h2>Campo com Saldo Atual</h2>
+        <h2>Campo com Saldo Atual</h2>
 
-<a href="{% url 'core:carregarsaldo'%}">Carregar Saldo Conta</a><br>
-</br>
+        <a href="{% url 'core:carregarsaldo'%}">Carregar Saldo Conta</a><br>
+        </br>
 
-<a href="{% url 'core:areacomum'%}">Ir para Área Comum</a><br>
-</br>
+        <a href="{% url 'core:areacomum'%}">Ir para Área Comum</a><br>
+        </br>
+    </div>
 
 </body>
 </html>
