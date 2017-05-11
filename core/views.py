@@ -52,6 +52,7 @@ def homepage(request):
 def areacomum(request):
     return render(request, 'core/areacomum.html')
 
+@login_required
 def admin(request):
     context = {}
     if User.is_superuser:
@@ -104,10 +105,11 @@ def novoRegisto(request):
     send_mail(titulo, mensagem, settings.EMAIL_HOST_USER, [emaildestino,settings.EMAIL_HOST_USER], fail_silently=True)
     return render(request, 'core/homepage.html')
 
-
+@login_required
 def registo(request):
     return render(request, 'core/registo.html')
 
+@login_required
 def loginpage(request):
     return render(request, 'core/loginpage.html')
 
@@ -128,6 +130,7 @@ def loginview(request):
         context['noUser'] = True
         return render(request, "core/loginpage.html", context)
 
+@login_required
 def logoutview(request):
     logout(request)
     return render(request, 'core/homepage.html')
@@ -177,6 +180,7 @@ def apostar(request):
 def areapessoal(request):
     return render(request, 'core/areapessoal.html')
 
+@login_required
 def mostrardados(request):
     return render(request, 'core/mostrardados.html')
 
@@ -245,6 +249,7 @@ def editRegisto(request):
     else:
         return HttpResponse("Desculpe. Alguma coisa não funcionou!")
 
+@login_required
 def criarInfoBanc(request):
     return render(request, 'core/infoBanc.html')
 
@@ -274,11 +279,6 @@ def carregaS(request):
         return HttpResponseRedirect(reverse('core:carregarsaldo'))
     else:
         return HttpResponseRedirect(reverse('core:criarInfoBanc'))
-
-
-
-
-
 
 
 @login_required
