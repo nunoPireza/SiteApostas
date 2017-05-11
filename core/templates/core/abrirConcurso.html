@@ -1,0 +1,13 @@
+<p>Abrir concurso : Confirme numero e indique data (dia/mes/ano</p>
+
+{% if not aberto %}
+<form action="{% url 'core:abrirConcurso'%}" method="post">
+    {% csrf_token %}
+        <input type="number" name="numero" value="{{ numero }}">
+        <input type="date" name="data">
+    <button type="submit" name="btt" value="confirma ">Abrir Concurso</button>
+    </form>
+{% else %}
+ <h1> Concurso aberto</h1>
+    <a href="{% url 'core:admin' %}"> Voltar a Administradores</a>
+{% endif %}

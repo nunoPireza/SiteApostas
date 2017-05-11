@@ -8,18 +8,18 @@
             <div class="col-6 centered">
                 <form action = "{% url 'core:submeteraposta' %}" method="post" >
                 <b><p>Preenche 5 Bolas</p></b>
-                <input type="text" name="Bola1" maxlength="2" max="50" min="1" size="2" onkeyup="post('{% url "core:sugestoes" %}', {eb1:Bola1.value,eb2:Bola2.value,eb3:Bola3.value,eb4:Bola4.value,eb5:Bola5.value,ee1:Estrela1.value,ee2:Estrela2.value})" required autofocus>
-                <input type="text" name="Bola2" maxlength="2" max="50" min="1" size="2" onkeyup="post('{% url "core:sugestoes" %}', {eb1:Bola1.value,eb2:Bola2.value,eb3:Bola3.value,eb4:Bola4.value,eb5:Bola5.value,ee1:Estrela1.value,ee2:Estrela2.value})" required>
-                <input type="text" name="Bola3" maxlength="2" max="50" min="1" size="2" onkeyup="post('{% url "core:sugestoes" %}', {eb1:Bola1.value,eb2:Bola2.value,eb3:Bola3.value,eb4:Bola4.value,eb5:Bola5.value,ee1:Estrela1.value,ee2:Estrela2.value})" required>
-                <input type="text" name="Bola4" maxlength="2" max="50" min="1" size="2" onkeyup="post('{% url "core:sugestoes" %}', {eb1:Bola1.value,eb2:Bola2.value,eb3:Bola3.value,eb4:Bola4.value,eb5:Bola5.value,ee1:Estrela1.value,ee2:Estrela2.value})" required>
-                <input type="text" name="Bola5" maxlength="2" max="50" min="1" size="2" onkeyup="post('{% url "core:sugestoes" %}', {eb1:Bola1.value,eb2:Bola2.value,eb3:Bola3.value,eb4:Bola4.value,eb5:Bola5.value,ee1:Estrela1.value,ee2:Estrela2.value})" required>
+                <input type="number" name="Bola1" maxlength="2" max="50" min="1" size="2" onkeyup="post('{% url "core:sugestoes" %}', {eb1:Bola1.value,eb2:Bola2.value,eb3:Bola3.value,eb4:Bola4.value,eb5:Bola5.value,ee1:Estrela1.value,ee2:Estrela2.value})" required autofocus>
+                <input type="number" name="Bola2" maxlength="2" max="50" min="1" size="2" onkeyup="post('{% url "core:sugestoes" %}', {eb1:Bola1.value,eb2:Bola2.value,eb3:Bola3.value,eb4:Bola4.value,eb5:Bola5.value,ee1:Estrela1.value,ee2:Estrela2.value})" required>
+                <input type="number" name="Bola3" maxlength="2" max="50" min="1" size="2" onkeyup="post('{% url "core:sugestoes" %}', {eb1:Bola1.value,eb2:Bola2.value,eb3:Bola3.value,eb4:Bola4.value,eb5:Bola5.value,ee1:Estrela1.value,ee2:Estrela2.value})" required>
+                <input type="number" name="Bola4" maxlength="2" max="50" min="1" size="2" onkeyup="post('{% url "core:sugestoes" %}', {eb1:Bola1.value,eb2:Bola2.value,eb3:Bola3.value,eb4:Bola4.value,eb5:Bola5.value,ee1:Estrela1.value,ee2:Estrela2.value})" required>
+                <input type="number" name="Bola5" maxlength="2" max="50" min="1" size="2" onkeyup="post('{% url "core:sugestoes" %}', {eb1:Bola1.value,eb2:Bola2.value,eb3:Bola3.value,eb4:Bola4.value,eb5:Bola5.value,ee1:Estrela1.value,ee2:Estrela2.value})" required>
 
 
             <br>
             <div class="col-6 centered">
                 <b><p>Preenche 2 Estrelas</p></b>
-                <input type="text" name="Estrela1" maxlength="2" max="13" min="1" size="2" onkeyup="post('{% url "core:sugestoes" %}', {eb1:Bola1.value,eb2:Bola2.value,eb3:Bola3.value,eb4:Bola4.value,eb5:Bola5.value,ee1:Estrela1.value,ee2:Estrela2.value})">
-                <input type="text" name="Estrela2" maxlength="2" max="13" min="1" size="2" onkeyup="post('{% url "core:sugestoes" %}', {eb1:Bola1.value,eb2:Bola2.value,eb3:Bola3.value,eb4:Bola4.value,eb5:Bola5.value,ee1:Estrela1.value,ee2:Estrela2.value})">
+                <input type="number" name="Estrela1" maxlength="2" max="13" min="1" size="2" onkeyup="post('{% url "core:sugestoes" %}', {eb1:Bola1.value,eb2:Bola2.value,eb3:Bola3.value,eb4:Bola4.value,eb5:Bola5.value,ee1:Estrela1.value,ee2:Estrela2.value})">
+                <input type="number" name="Estrela2" maxlength="2" max="13" min="1" size="2" onkeyup="post('{% url "core:sugestoes" %}', {eb1:Bola1.value,eb2:Bola2.value,eb3:Bola3.value,eb4:Bola4.value,eb5:Bola5.value,ee1:Estrela1.value,ee2:Estrela2.value})">
             </div>
             <br>
             <div class="col-6 centered">

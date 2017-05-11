@@ -667,12 +667,52 @@ def verificaRepeticao(bolas,estrelas): #devolve verdade se repetida
     return True
 
 def inserirconcurso(request):
-    concursoAtivo=Sorteio.objects.filter(activo=True)
-    concursoAtivo=concursoAtivo[0].nSorteio
+    concursoAtivo = get_object_or_404(Sorteio, activo=True)
+    fechado=False
+    if(request.POST): #se veio da página de registar concurso
+       #inserir dados na BD
+        concursoAtivo.bola1=request.POST['Bola1']
+        concursoAtivo.bola2 = request.POST['Bola2']
+        concursoAtivo.bola3 = request.POST['Bola3']
+        concursoAtivo.bola4 = request.POST['Bola4']
+        concursoAtivo.bola5 = request.POST['Bola5']
+        concursoAtivo.estrela1=request.POST['Estrela1']
+        concursoAtivo.estrela2 = request.POST['Estrela2']
+
+        concursoAtivo.premio1 = request.POST['premio1']
+        concursoAtivo.premio2 = request.POST['premio2']
+        concursoAtivo.premio3 = request.POST['premio3']
+        concursoAtivo.premio4 = request.POST['premio4']
+        concursoAtivo.premio5 = request.POST['premio5']
+        concursoAtivo.premio6 = request.POST['premio6']
+        concursoAtivo.premio7 = request.POST['premio7']
+        concursoAtivo.premio8 = request.POST['premio8']
+        concursoAtivo.premio9 = request.POST['premio9']
+        concursoAtivo.premio10 = request.POST['premio10']
+        concursoAtivo.premio11 = request.POST['premio11']
+        concursoAtivo.premio12 = request.POST['premio12']
+        concursoAtivo.premio13 = request.POST['premio13']
+
+        concursoAtivo.activo=False
+        fechado=True
+        concursoAtivo.save()
+
+    return render(request, 'core/inserirconcurso.html', {'concursoAtivo':concursoAtivo, 'fechado':fechado})
+
+def abrirConcurso(request):
+    aberto=False
+    numero = request.POST['numero']
+    if ('data' in request.POST):
+        data=request.POST['data']
+        aberto=True
+        numero=int(numero)
+        data = datetime.strptime(data, '%d/%m/%Y')
+        s=Sorteio(nSorteio=numero, dataSorteio=data)
+        s.save()
 
 
-    return render(request, 'core/inserirconcurso.html', {'concursoAtivo':concursoAtivo})
-
+    numero=int(numero)+1
+    return render(request, 'core/abrirConcurso.html',{'numero':numero}, {'aberto':aberto})
 
 
 def carregaF(request):
@@ -689,7 +729,7 @@ def carregaF(request):
         n = s[0]
         data = s[1]
         data = datetime.strptime(data, '%d/%m/%Y')
-        premioV = s[2]
+
         bolas = [int(i) for i in s[2:7]]
         estrelas = [int(i) for i in s[7:9]]
         premios=[Decimal(i)for i in s[9:23]]
@@ -800,7 +840,7 @@ def submeterApostas(request): #grava ficheiro CSV para registar na SantaCasa
 
     return response
 
-'''def distribuipremio:
+def distribuipremio():
     #premioMax = Sorteio.objects.values('premio').get(activo=False).order_by('nSorteio').last()
     premioMax = 200000
     sorteioAtual = Sorteio.objects.values('nSorteio').get(activo=False).order_by('nSorteio').last()
@@ -851,6 +891,6 @@ def submeterApostas(request): #grava ficheiro CSV para registar na SantaCasa
         for linha in chavesjogadas:
             for i in range(4):
                 if linha['listaBolasAposta'][i] == listabolaspremio[i]:
-                    
-                    '''
+                    naofaznada=0
+
 
