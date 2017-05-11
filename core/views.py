@@ -1,5 +1,6 @@
 import os,csv
 from access_tokens import tokens
+from decimal import *
 from django.core.mail import EmailMessage
 from django.shortcuts import render, get_object_or_404, HttpResponse, HttpResponseRedirect, redirect
 from django.core.urlresolvers import reverse
@@ -283,7 +284,17 @@ def carregaS(request):
 
 @login_required
 def apostar(request):
-    return render(request, 'core/apostar.html')
+    context = {'submetido': False}
+    context['Saldo'] = 0.0
+    PRECOAPOSTA = 2.5
+
+    if Conta.objects.filter(user_id=request.user.id).exists():
+        conta = get_object_or_404(Conta,user_id=request.user.id)
+        #if conta.saldo >= PRECOAPOSTA:
+        context['Saldo'] = conta.saldo
+        context['saldoOK'] = True
+
+    return render(request, 'core/apostar.html', context)
 
 @csrf_exempt
 def sugestoes(request):
@@ -561,12 +572,99 @@ def npe(data, numerosPorEstrelas):
 
 
 
-def submeteraposta(request):
+def submeteraposta(request): #grava na base de dados
     PRECOAPOSTA=2.5
-    if Conta.objects.filter(user_id=request.user.id).exists():
-        conta=Conta.objects.filter(user_id=request.user.id)
-        if conta.saldo>=PRECOAPOSTA:
-            conta.saldo.set(conta.saldo-PRECOAPOSTA)
+    sorteioAtual = Sorteio.objects.values('nSorteio').filter(activo=True).order_by('nSorteio').last()
+    if sorteioAtual: #os admins podem ter se esquecido de ativar o concurso!
+        sorteioAtual = sorteioAtual['nSorteio']
+    else:
+        #falta implementar
+        donothing=0
+    bolas=set()
+    estrelas=set()
+    #transfere os dados do form para um set (remove repetidos)
+    bolas.add(int(request.POST['Bola1']))
+    bolas.add(int(request.POST['Bola2']))
+    bolas.add(int(request.POST['Bola3']))
+    bolas.add(int(request.POST['Bola4']))
+    bolas.add(int(request.POST['Bola5']))
+    estrelas.add(int(request.POST['Estrela1']))
+    estrelas.add(int(request.POST['Estrela2']))
+    #falta meter várias apostas na mesma semana
+    verificada= verificaAposta(bolas,estrelas) #verifica se é uma aposta válida
+    if not verificada:
+        messages.error(request,"aposta inválida")
+    if verificada:
+        repetida=verificaRepeticao(bolas,estrelas) #verifica se já foi submetida
+        if repetida:
+            messages.error(request, "Aposta já foi submetida neste concurso")
+        if not repetida:
+            if Conta.objects.filter(user_id=request.user.id).exists():
+                    conta=get_object_or_404(Conta,user_id=request.user.id)
+                    if conta.saldo>=PRECOAPOSTA:
+                        conta.saldo-= Decimal(PRECOAPOSTA) #remove saldo
+                        conta.save()
+                        user_id=conta.user_id
+                        #grava aposta na BD
+                        b1 = bolas.pop()
+                        b2 = bolas.pop()
+                        b3 = bolas.pop()
+                        b4 = bolas.pop()
+                        b5 = bolas.pop()
+                        e1 = estrelas.pop()
+                        e2 = estrelas.pop()
+                        a = Aposta(dataAposta=datetime.now(), nConta_id=user_id, nSorteio_id=sorteioAtual, bola1=b1,bola2=b2,bola3=b3,bola4=b4,bola5=b5,estrela1=e1,estrela2=e2 )
+                        a.save()
+                        messages.success(request, 'Aposta submetida')
+                    else:
+                        messages.error(request, "Saldo insuficiente")
+
+    return render(request, 'core/apostar.html' )
+
+def verificaAposta(bolas,estrelas): #verifica se obdece ás regras
+    #mudar de set para lista
+    bolas=list(bolas)
+    estrelas=list(estrelas)
+
+    if(len(bolas)!=5 or len(estrelas)!=2): #dimensão
+        return False #se houver bolas repetidas são detetadas aqui
+    #i = 0
+    for b in bolas:
+        if (b<1 or b>50): # não é um número válido
+            return False
+    for e in estrelas:
+        if(e<1 or e>12): #não é uma estrela válida
+            return False
+
+    '''j = 1+i
+    for nextB in bolas[j,]: #Repeticões não é necessário pq passou por um set(.)
+        if nextB==b:
+            return False
+        else:
+            j+=1
+        i+=1'''
+    return True
+
+def verificaRepeticao(bolas,estrelas): #devolve verdade se repetida
+    #obter as apostas já submetidas
+    apostas = Aposta.objects.all()
+    # mudar de set para lista
+    bolas = list(bolas)
+    estrelas = list(estrelas)
+    for a in apostas:
+        for b in bolas:
+            if b!=a.bola1:
+                if b!=a.bola2:
+                    if b!=a.bola3:
+                        if b!=a.bola4:
+                            if b!=a.bola5:
+                                return False
+
+        for e in estrelas:
+            if e!=a.estrela1:
+                if e != a.estrela2:
+                    return False
+    return True
 
 def inserirconcurso(request):
     concursoAtivo=Sorteio.objects.filter(activo=True)
@@ -670,7 +768,7 @@ def enviarEmail(request):
     else:
         return render(request, 'core/areacomum.html')
 
-def submeterApostas(request):
+def submeterApostas(request): #grava ficheiro CSV para registar na SantaCasa
     # Create the HttpResponse object with the appropriate CSV header.
     context = {}
 
