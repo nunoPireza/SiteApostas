@@ -44,10 +44,7 @@ def idade(request):
         return render(request, 'core/exitMenor.html')
 
 def homepage(request):
-    if request.user.is_authenticated:
-        return render(request, 'core/areacomum.html')
-    else:
-        return render(request, 'core/homepage.html')
+    return render(request, 'core/homepage.html')
 
 @login_required
 def areacomum(request):
@@ -55,6 +52,12 @@ def areacomum(request):
     apostasporsorteio = Aposta.objects.values('nConta_id').filter(nSorteio_id=ultimoSorteio)
     context = {'ultimoSorteio': ultimoSorteio, 'apostasporsorteio': apostasporsorteio}  # dicionário de contexto
     return render(request, 'core/areacomum.html', context)
+
+@login_required
+def areapessoal(request):
+    apostasuser = Aposta.objects.all().filter(nConta_id=request.user.id)
+    context = {'apostasuser': apostasuser}
+    return render(request, 'core/areapessoal.html',context)
 
 @login_required
 def admin(request):
@@ -123,7 +126,7 @@ def loginview(request):
     user = authenticate(username=username, password=password)
     if user is not None:
         login(request, user)
-        return render(request, 'core/areacomum.html')
+        return HttpResponseRedirect(reverse('core:areacomum'))
     else:
         messages.warning(request, 'Os dados introduzidos estão incorretos')
         return render(request, "core/loginpage.html")
@@ -174,9 +177,6 @@ def submeterpass(request):
 def apostar(request):
     return render(request, 'core/apostar.html')
 '''
-@login_required
-def areapessoal(request):
-    return render(request, 'core/areapessoal.html')
 
 @login_required
 def mostrardados(request):
