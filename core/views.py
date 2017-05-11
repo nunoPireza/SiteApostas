@@ -112,7 +112,7 @@ def novoRegisto(request):
 def registo(request):
     return render(request, 'core/registo.html')
 
-@login_required
+
 def loginpage(request):
     return render(request, 'core/loginpage.html')
 
