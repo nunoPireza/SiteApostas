@@ -219,9 +219,13 @@ def editRegisto(request):
             if request.POST['semail']:
                 request.user.email = request.POST['semail']
                 request.user.save()
-            if request.POST['snif']:
+
+            nif_str = len(str(request.POST['snif']))
+            if request.POST['snif'] and int(nif_str)==9:
                 usr.NIF = request.POST['snif']
-            if request.POST['scontacto']:
+
+            contact_str = len(str(request.POST['scontacto']))
+            if request.POST['scontacto'] and int(contact_str) == 9:
                 usr.contacto = request.POST['scontacto']
             if request.POST['smorada']:
                 usr.morada = request.POST['smorada']
