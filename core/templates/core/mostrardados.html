@@ -1,4 +1,30 @@
-<p>Aqui deverá existir uma tabela com a informação do utilizador</p>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
 
-<a href="{% url 'core:areapessoal'%}">Ir para Área Pessoal</a><br>
-</br>
+    <div class="container">
+        <p>Bem vindo, <b>{{ user.get_full_name }}</b>! </p>
+
+        <p>Deixa-me contar uma história acerca de ti! </p>
+
+        <p> O teu nome começou por ser <b>{{ user.first_name }}</b> e depois os teus pais decidiram que não era suficiente
+        e então acrescentaram <b>{{ user.last_name }}</b>.
+        Tu nasceste no singelo país de <b>{{ user.utilizador.pais }}</b> e atualmente moras em <b>{{ user.utilizador.morada }}</b>.
+        Uma das tuas ambições na vida é ser rico, por isso é que preencheste o teu número de contribuinte
+        <b>{{ user.utilizador.NIF }}</b> e o teu username <b>{{ user.username }}</b> e criaste esta conta.</p>
+
+        <p>Se ganhares somos os primeiros a ligar-te para o <b>{{ user.utilizador.contacto }}</b> e já que estamos com a mão na massa
+        também te enviamos um email para <b>{{ user.email }}</p>
+
+        {% if user.conta.IBAN != None %}
+            <p>Ainda bem que colocaste o teu NIB <b>{{ user.conta.IBAN }}</b> assim podemos transferir o dinheiro!</p>
+        {% else %}
+            <p>Se calhar é melhor ires preencher o teu NIB, porque senaão não consegues utilizar esta página!</p>
+        {% endif %}
+
+        <p>Se achas que alguma coisa não bate certa nesta história se calhar é melhor ires atualizar os teus dados</p>
+    </div>
+
+    <a href="{% url 'core:areapessoal'%}">Ir para Área Pessoal</a><br>
+    </br>
+{% endblock %}

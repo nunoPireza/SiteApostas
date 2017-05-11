@@ -19,6 +19,14 @@
 
             <p>País :  <input type="text" name="spais" placeholder="{{ user.utilizador.pais }}"></p>
 
+            {% if messages %}
+		    <ul class='messages'>
+                {% for message in messages %}
+				<li class="{{ message.tags }}">{{ message }}</li>
+			{% endfor %}
+		    </ul>
+	        {% endif %}
+
             <br><input type="submit" value="Salvar">&nbsp;&nbsp;
         </form>
             <p><a href="{% url 'core:areacomum' %}"><button type="button">Voltar a homepage</button></a></p>
@@ -26,12 +34,6 @@
             <a href="{% url 'core:areapessoal'%}">Ir para Área Pessoal</a><br>
 
 
-        {% if messages %}
-		    <ul class='messages'>
-                {% for message in messages %}
-				<li class="{{ message.tags }}">{{ message }}</li>
-			{% endfor %}
-		    </ul>
-	    {% endif %}
+
     </div>
 {% endblock %}

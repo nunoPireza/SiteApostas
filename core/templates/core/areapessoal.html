@@ -13,21 +13,17 @@
     <div class="container">
         <h1>Bem vindo, {{ user.get_full_name }} !</h1>
 
-        <ul>
-            {{ user.email }}
-        </ul>
-
-
-        <li><a href="{% url 'core:changepassword' %}"> mudar pass</a></li>
-        </br>
 
         <a href="{% url 'core:mostrardados'%}">Mostrar Dados Pessoais</a><br>
         </br>
 
-        <a href="{% url 'core:editardados'%}">Editar Dados Pessoais</a><br>
+        <a href="{% url 'core:changepassword' %}">Alterar Password</a><br>
         </br>
 
-        <a href="{% url 'core:criarInfoBanc'%}">Editar os dados bancários</a><br>
+        <a href="{% url 'core:criarInfoBanc'%}">Dados Bancários</a><br>
+        </br>
+
+         <a href="{% url 'core:editardados'%}">Atualizar Dados Conta</a><br>
         </br>
 
         <h2>Tabela com histórico de apostas</h2><br>
@@ -35,7 +31,7 @@
 
         <h2>Campo com Saldo Atual</h2>
 
-        <a href="{% url 'core:carregarsaldo'%}">Carregar Saldo Conta</a><br>
+        <a href="{% url 'core:carregarsaldo'%}">Carregar Saldo</a><br>
         </br>
 
         <a href="{% url 'core:areacomum'%}">Ir para Área Comum</a><br>
