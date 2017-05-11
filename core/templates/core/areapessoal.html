@@ -29,29 +29,34 @@
         <a href="{% url 'core:editardados'%}">Atualizar Dados Conta</a><br>
         </br>
 
-        <h2>Tabela com histórico de apostas do {{ user.get_full_name }}</h2><br>
+        <h2 align="center">Tabela com histórico de apostas do {{ user.get_full_name }}</h2><br>
 
-        <table class="table table-bordered">
-            <tr>
-                <th>Bola 1</th>
-                <th>Bola 2</th>
-                <th>Bola 3</th>
-                <th>Bola 4</th>
-                <th>Bola 5</th>
-                <th>Estrela 1</th>
-                <th>Estrela 2</th>
-            </tr>
-            {% for apos in apostasuser %}
-             <tr>
-                <td>{{ apos.bola1 }}</td>
-                <td>{{ apos.bola2 }}</td>
-                <td>{{ apos.bola3 }}</td>
-                <td>{{ apos.bola4 }}</td>
-                <td>{{ apos.bola5 }}</td>
-                <td>{{ apos.estrela1 }}</td>
-                <td>{{ apos.estrela2 }}</td>
-             </tr>
-            {% endfor %}
+        {% if apostasuser %}
+
+            <table class="table table-bordered">
+                <tr>
+                    <th>Bola 1</th>
+                    <th>Bola 2</th>
+                    <th>Bola 3</th>
+                    <th>Bola 4</th>
+                    <th>Bola 5</th>
+                    <th>Estrela 1</th>
+                    <th>Estrela 2</th>
+                </tr>
+                {% for apos in apostasuser %}
+                <tr>
+                    <td>{{ apos.bola1 }}</td>
+                    <td>{{ apos.bola2 }}</td>
+                    <td>{{ apos.bola3 }}</td>
+                    <td>{{ apos.bola4 }}</td>
+                    <td>{{ apos.bola5 }}</td>
+                    <td>{{ apos.estrela1 }}</td>
+                    <td>{{ apos.estrela2 }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <h3>Ainda não fizestes apostas no nosso Site. Aposta já. </h3>
+            {% endif %}
         </table>
     </div>
 

@@ -44,10 +44,7 @@ def idade(request):
         return render(request, 'core/exitMenor.html')
 
 def homepage(request):
-    if request.user.is_authenticated:
-        return render(request, 'core/areacomum.html')
-    else:
-        return render(request, 'core/homepage.html')
+    return render(request, 'core/homepage.html')
 
 @login_required
 def areacomum(request):
@@ -129,7 +126,7 @@ def loginview(request):
     user = authenticate(username=username, password=password)
     if user is not None:
         login(request, user)
-        return render(request, 'core/areacomum.html')
+        return HttpResponseRedirect(reverse('core:areacomum'))
     else:
         messages.warning(request, 'Os dados introduzidos estão incorretos')
         return render(request, "core/loginpage.html")
