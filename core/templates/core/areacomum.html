@@ -50,7 +50,8 @@
             {% if ultimoSorteio %}
                 <ul>
                     {% for sorteio in ultimoSorteio %}
-                      <p>  Sorteio Numero : {{ sorteio.nSorteio }}  Premio : {{ sorteio.premio }}  N de Apostas {{ apostasporsorteio.values }}
+
+                      <p>  Sorteio Numero : {{ sorteio.nSorteio }}  Premio : {{ sorteio.premio1 }} Número de Apostas : {{ apostasporsorteio }}
                     {% endfor %}
                 </ul>
             {% else %}

@@ -19,7 +19,10 @@
         <form action="{% url 'core:criarInfoB'%}" method="post">
             {% csrf_token %}
 
-            <p><strong>IBAN :  </strong><input type="number" placeholder="IBAN" name="input_iban"/></p>
+            <p><strong>IBAN :  </strong><input type="number" placeholder="IBAN" name="input_iban" required/></p>
+            {% if correct_iban %}
+                <strong>IBAN deve ter 23 digitos</strong>
+            {% endif %}
 
             <br><input type="submit" value="Registar"/>&nbsp;&nbsp;<button type="reset" value="Reset">Apagar Valores</button>
         </form>
