@@ -25,7 +25,7 @@ class Conta(models.Model):
 class Sorteio(models.Model):
     nSorteio=models.PositiveIntegerField(primary_key=True)
     dataSorteio=models.DateField(auto_now=False, auto_now_add=False)
-    premio = models.IntegerField(null=True)
+
     bola1 = models.PositiveSmallIntegerField(null=True, blank=True)
     bola2 = models.PositiveSmallIntegerField(null=True, blank=True)
     bola3 = models.PositiveSmallIntegerField(null=True, blank=True)
@@ -33,7 +33,22 @@ class Sorteio(models.Model):
     bola5 = models.PositiveSmallIntegerField(null=True, blank=True)
     estrela1 = models.PositiveSmallIntegerField(null=True, blank=True)
     estrela2 = models.PositiveSmallIntegerField(null=True, blank=True)
+
     activo=models.BooleanField(default=False)
+
+    premio1 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
+    premio2 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
+    premio3 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
+    premio4 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
+    premio5 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
+    premio6 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
+    premio7 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
+    premio8 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
+    premio9 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
+    premio10 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
+    premio11 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
+    premio12 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
+    premio13 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
 
     def __str__(self):
         return self.nSorteio
@@ -61,6 +76,7 @@ class Aposta(models.Model):
     bola5 = models.PositiveSmallIntegerField()
     estrela1 = models.PositiveSmallIntegerField()
     estrela2 = models.PositiveSmallIntegerField()
+
 
     def __str__(self):
         return self.id

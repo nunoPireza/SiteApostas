@@ -587,7 +587,7 @@ def submeteraposta(request): #grava na base de dados
     bolas.add(int(request.POST['Bola5']))
     estrelas.add(int(request.POST['Estrela1']))
     estrelas.add(int(request.POST['Estrela2']))
-    #falta meter várias apostas na mesma semana
+
     verificada= verificaAposta(bolas,estrelas) #verifica se é uma aposta válida
     if not verificada:
         messages.error(request,"aposta inválida")
@@ -686,12 +686,13 @@ def carregaF(request):
         n = s[0]
         data = s[1]
         data = datetime.strptime(data, '%d/%m/%Y')
-        premioV = s[2]
-        bolas = [int(i) for i in s[3:8]]
-        estrelas = [int(i) for i in s[8:10]]
+        #premioV = s[2]
+        bolas = [int(i) for i in s[2:7]]
+        estrelas = [int(i) for i in s[7:9]]
+        premios=[Decimal(i)for i in s[9:23]]
         # Atualiza tabela Tabela de Sorteio
         si = Sorteio(nSorteio=n, dataSorteio=data, premio=premioV, bola1=bolas[0], bola2=bolas[1], bola3=bolas[2], bola4=bolas[3],
-                     bola5=bolas[4], estrela1=estrelas[0], estrela2=estrelas[1])
+                     bola5=bolas[4], estrela1=estrelas[0], estrela2=estrelas[1], premio1=premios[0],premio2=premios[1],premio3=premios[2],premio4=premios[3],premio5=premios[4],premio6=premios[5],premio7=premios[6],premio8=premios[7],premio9=premios[8],premio10=premios[9],premio11=premios[10],premio12=premios[11],premio13=premios[12],)
         si.save()
         # Ordena chave
         bolas.sort()
