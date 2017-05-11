@@ -690,9 +690,13 @@ def carregaF(request):
         bolas = [int(i) for i in s[2:7]]
         estrelas = [int(i) for i in s[7:9]]
         premios=[Decimal(i)for i in s[9:23]]
+        #verifica falta de casas decimais:
+        for p in premios:
+            if (p.real==0 and len(p.imag)>2):
+                p.real=p.imag
+                p.imag=0
         # Atualiza tabela Tabela de Sorteio
-        si = Sorteio(nSorteio=n, dataSorteio=data, premio=premioV, bola1=bolas[0], bola2=bolas[1], bola3=bolas[2], bola4=bolas[3],
-                     bola5=bolas[4], estrela1=estrelas[0], estrela2=estrelas[1], premio1=premios[0],premio2=premios[1],premio3=premios[2],premio4=premios[3],premio5=premios[4],premio6=premios[5],premio7=premios[6],premio8=premios[7],premio9=premios[8],premio10=premios[9],premio11=premios[10],premio12=premios[11],premio13=premios[12],)
+        si = Sorteio(nSorteio=n, dataSorteio=data, bola1=bolas[0], bola2=bolas[1], bola3=bolas[2], bola4=bolas[3], bola5=bolas[4], estrela1=estrelas[0], estrela2=estrelas[1], premio1=premios[0],premio2=premios[1],premio3=premios[2],premio4=premios[3],premio5=premios[4],premio6=premios[5],premio7=premios[6],premio8=premios[7],premio9=premios[8],premio10=premios[9],premio11=premios[10],premio12=premios[11],premio13=premios[12],)
         si.save()
         # Ordena chave
         bolas.sort()
