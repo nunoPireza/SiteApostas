@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DjangoModelDependency</ID>
+  <OriginalElement>#SiteApostas</OriginalElement>
+  <nodes>
+    <node x="-1.44692737430168" y="289.9553072625698">core.models.Sorteio</node>
+    <node x="137.00000000000003" y="158.0">django.contrib.auth.models.Group</node>
+    <node x="0.0" y="469.0">core.models.Estrelas</node>
+    <node x="157.0" y="316.0">core.models.Conta</node>
+    <node x="77.25" y="395.0">core.models.Aposta</node>
+    <node x="309.0" y="316.0">core.models.Utilizador</node>
+    <node x="184.0" y="469.0">core.models.Bolas</node>
+    <node x="156.00000000000006" y="0.0">django.contrib.contenttypes.models.ContentType</node>
+    <node x="201.00000000000003" y="237.0">django.contrib.auth.models.User</node>
+    <node x="183.50000000000006" y="79.0">django.contrib.auth.models.Permission</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="core.models.Aposta" target="core.models.Sorteio">
+      <point x="-34.25" y="-14.5" />
+      <point x="111.5" y="370.0" />
+      <point x="68.5" y="370.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="django.contrib.auth.models.User" target="django.contrib.auth.models.Group">
+      <point x="-51.25" y="-14.5" />
+      <point x="252.25000000000003" y="212.0" />
+      <point x="244.50000000000003" y="212.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="core.models.Conta" target="django.contrib.auth.models.User">
+      <point x="2.8421709430404007E-14" y="-14.5" />
+      <point x="223.00000000000006" y="291.0" />
+      <point x="252.25000000000003" y="291.0" />
+      <point x="-51.25" y="14.5" />
+    </edge>
+    <edge source="django.contrib.auth.models.User" target="django.contrib.auth.models.Permission">
+      <point x="51.25" y="-14.5" />
+      <point x="354.75" y="212.0" />
+      <point x="362.5" y="212.0" />
+      <point x="362.5" y="133.0" />
+      <point x="363.50000000000006" y="133.0" />
+      <point x="60.0" y="14.5" />
+    </edge>
+    <edge source="core.models.Aposta" target="core.models.Conta">
+      <point x="34.25" y="-14.5" />
+      <point x="180.0" y="370.0" />
+      <point x="223.0" y="370.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="core.models.Utilizador" target="django.contrib.auth.models.User">
+      <point x="0.0" y="-14.5" />
+      <point x="384.0" y="291.0" />
+      <point x="354.75" y="291.0" />
+      <point x="51.25" y="14.5" />
+    </edge>
+    <edge source="django.contrib.auth.models.Group" target="django.contrib.auth.models.Permission">
+      <point x="2.8421709430404007E-14" y="-14.5" />
+      <point x="244.50000000000006" y="133.0" />
+      <point x="243.50000000000006" y="133.0" />
+      <point x="-60.0" y="14.5" />
+    </edge>
+    <edge source="django.contrib.auth.models.Permission" target="django.contrib.contenttypes.models.ContentType">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.991119691119691" x="229.94692737430177" y="274.4162011173185" />
+  <SelectedNodes>
+    <node>core.models.Conta</node>
+  </SelectedNodes>
+  <Categories />
+</Diagram>
+
