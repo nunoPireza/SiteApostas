@@ -45,7 +45,17 @@
  {%  if user.is_superuser %}
     <li><a href="{% url 'core:admin' %}"> Administradores</a></li>
  {% endif %}
-<h2>Estatisticas</h2>
+
+            <h2>Estatisticas</h2>
+            {% if ultimoSorteio %}
+                <ul>
+                    {% for sorteio in ultimoSorteio %}
+                      <p>  Sorteio Numero : {{ sorteio.nSorteio }}  Premio : {{ sorteio.premio }}  N de Apostas {{ apostasporsorteio.values }}
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Nao ha Sorteios disponiveis.</p>
+            {% endif %}
 
 <h1>Aqui ficam imagens publicidade!!!</h1>
         </div>

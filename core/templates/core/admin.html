@@ -31,7 +31,10 @@
                 <th style="border: 1px solid black">
                     <p><a href="{% url 'core:inserirconcurso' %}">Inserir chave do último sorteio</a>. Fechar e abrir sorteios para os apostadores</p>
                     <a>(Re)Inicializar tabela de resultados a partir de ficheiro .csv</a>
-                    <p><a href="{% url 'core:carregarficheiro' %}"><button type="button">carregar ficheiro</button></a></p>
+                    <p><a href="{% url 'core:carregaF' %}"><button type="button">Carregar Ficheiro</button></a></p>
+                    {% if done %}
+                        <strong>SUCESSO NO CARREGAMENTO</strong>
+                    {% endif %}
                 </th>
             </tr>
             <tr>

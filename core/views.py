@@ -48,7 +48,10 @@ def homepage(request):
 
 @login_required
 def areacomum(request):
-    return render(request, 'core/areacomum.html')
+    ultimoSorteio = Sorteio.objects.values('nSorteio').filter(activo=False)
+    apostasporsorteio = Aposta.objects.values('nConta_id').filter(nSorteio_id=ultimoSorteio)
+    context = {'ultimoSorteio': ultimoSorteio, 'apostasporsorteio': apostasporsorteio}  # dicionário de contexto
+    return render(request, 'core/areacomum.html', context)
 
 def admin(request):
     context = {}
@@ -574,8 +577,6 @@ def inserirconcurso(request):
     return render(request, 'core/inserirconcurso.html', {'concursoAtivo':concursoAtivo})
 
 
-def carregarficheiro(request):
-    return render(request, 'core/carregarficheiro.html')
 
 def carregaF(request):
     Bolas.objects.all().delete()
@@ -591,10 +592,11 @@ def carregaF(request):
         n = s[0]
         data = s[1]
         data = datetime.strptime(data, '%d/%m/%Y')
-        bolas = [int(i) for i in s[2:7]]
-        estrelas = [int(i) for i in s[7:9]]
+        premioV = s[2]
+        bolas = [int(i) for i in s[3:8]]
+        estrelas = [int(i) for i in s[8:10]]
         # Atualiza tabela Tabela de Sorteio
-        si = Sorteio(nSorteio=n, dataSorteio=data, bola1=bolas[0], bola2=bolas[1], bola3=bolas[2], bola4=bolas[3],
+        si = Sorteio(nSorteio=n, dataSorteio=data, premio=premioV, bola1=bolas[0], bola2=bolas[1], bola3=bolas[2], bola4=bolas[3],
                      bola5=bolas[4], estrela1=estrelas[0], estrela2=estrelas[1])
         si.save()
         # Ordena chave
@@ -608,7 +610,36 @@ def carregaF(request):
         #a PK de Sorteio não podia ser só o n.º de concurso
         #(para pensar melhor)
 
-    return HttpResponse('Feito')
+        #encher tabela apostas
+        f = open(os.path.join(settings.PROJECT_ROOT, 'apostas.csv'), "r")
+        linhasapostas = f.readlines()
+        apostas = linhasapostas[1:]
+        for s in apostas:
+            s = s.rstrip('\n')
+            s = s.split(';')
+            n = s[0]
+            data = s[1]
+            data = datetime.strptime(data, '%d/%m/%Y')
+            bolas1 = s[2]
+            bolas2 = s[3]
+            bolas3 = s[4]
+            bolas4 = s[5]
+            bolas5 = s[6]
+            estrelas1 = s[7]
+            estrelas2 = s[8]
+            conta = s[9]
+            sorteio = s[10]
+            # Atualiza tabela Tabela APOSTA
+            si = Aposta(id=n, dataAposta=data, bola1=bolas1, bola2=bolas2, bola3=bolas3, bola4=bolas4, bola5=bolas5,
+                        estrela1=estrelas1, estrela2=estrelas2, nConta_id=conta, nSorteio_id=sorteio)
+            si.save()
+
+
+        context={}
+        context['done']=True
+        context['isadmin']=True
+
+    return render(request, 'core/admin.html', context)
 
 
 def preencheTabelasBolas(novasBolas, data):
