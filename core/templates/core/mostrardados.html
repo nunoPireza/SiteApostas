@@ -24,13 +24,16 @@
 
         <br>
 
-        {% if user.conta.IBAN is null %}
-            <p>Ainda bem que preencheste o teu IBAN <b>{{ user.conta.IBAN }}</b> assim podemos transferir todo o dinheiro
-                que vais ganhar connosco!</p>
-        {% else %}
-
+        {% if not user.conta.IBAN %}
             <b><p>Tens de ir preencher o teu IBAN, porque senão não consegues utilizar esta página de
                 fazer dinheiro!</p></b>
+
+        {% else %}
+
+            <p>Ainda bem que preencheste o teu IBAN <b>{{ user.conta.IBAN }}</b> assim podemos transferir todo o dinheiro
+                que vais ganhar connosco!</p>
+
+
         {% endif %}
         <br>
 
