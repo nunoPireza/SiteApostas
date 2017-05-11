@@ -61,6 +61,11 @@
                             <a href="{% url 'core:registo' %}"> Novo Registo</a>
                         </li>
                     {% endif %}
+                     {% if user.is_authenticated %}
+                        <li>
+                            <a href="{% url 'core:areacomum' %}">Site Apostas</a>
+                        </li>
+                     {% endif %}
 
                      {% if user.is_authenticated %}
                         <li>

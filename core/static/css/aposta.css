@@ -1,0 +1,12 @@
+.centered p input{
+    display: table;
+    margin: auto;
+    text-align: center;
+}
+
+.centered2{
+    display: table;
+    margin: auto;
+    text-align: center;
+}
+

@@ -1,29 +1,14 @@
+{% load static %}
+
 <!-- <a>" lista </a>
 {% load extrafiltro %}
 -->
-
-
-<style>
-    table, th, td {
-        border: 1px solid black;
-        border-collapse: collapse;
-
-    }
-    table.s{
-        height: 300px;
-        overflow: scroll;
-    }
-    th, td {
-        padding: 5px;
-    }
-</style>
-
+<link rel="stylesheet" type="text/css" href="{% static 'css/sugestoes.css'%}">
 
 <p> DADOS DAS SUGESTOES </p>
 
 <div id="frequencias" style="float: left">
     <table class="s" id="frequenciaBolas"  style="float: left">
-
         <tr>
             <th colspan="2">Frequencia Bolas</th>
         </tr>

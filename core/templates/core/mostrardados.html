@@ -14,17 +14,17 @@
         <b>{{ user.utilizador.NIF }}</b> e o teu username <b>{{ user.username }}</b> e criaste esta conta.</p>
 
         <p>Se ganhares somos os primeiros a ligar-te para o <b>{{ user.utilizador.contacto }}</b> e já que estamos com a mão na massa
-        também te enviamos um email para <b>{{ user.email }}</p>
+            também te enviamos um email para <b>{{ user.email }}</b></p>
 
         {% if user.conta.IBAN != None %}
-            <p>Ainda bem que colocaste o teu NIB <b>{{ user.conta.IBAN }}</b> assim podemos transferir o dinheiro!</p>
+            <p>Ainda bem que colocaste o teu NIB <b>{{ user.conta.IBAN }}</b> assim podemos transferir todo o dinheiro
+                que vais ganhar connosco!</p>
         {% else %}
             <p>Se calhar é melhor ires preencher o teu NIB, porque senaão não consegues utilizar esta página!</p>
         {% endif %}
 
-        <p>Se achas que alguma coisa não bate certa nesta história se calhar é melhor ires atualizar os teus dados</p>
+        <h3>Se achas que alguma coisa não bate certa nesta história se calhar é melhor ires atualizar os teus dados</h3>
     </div>
 
-    <a href="{% url 'core:areapessoal'%}">Ir para Área Pessoal</a><br>
-    </br>
+
 {% endblock %}
