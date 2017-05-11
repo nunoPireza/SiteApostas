@@ -18,6 +18,9 @@
  <input type="text" name="Estrela1" maxlength="2" max="13" min="1" size="2" onkeyup   ="post('{% url "core:sugestoes" %}', {eb1:Bola1.value,eb2:Bola2.value,eb3:Bola3.value,eb4:Bola4.value,eb5:Bola5.value,ee1:Estrela1.value,ee2:Estrela2.value})">
  <input type="text" name="Estrela2" maxlength="2" max="13" min="1" size="2" onkeyup   ="post('{% url "core:sugestoes" %}', {eb1:Bola1.value,eb2:Bola2.value,eb3:Bola3.value,eb4:Bola4.value,eb5:Bola5.value,ee1:Estrela1.value,ee2:Estrela2.value})">
 
+
+
+
     <input type="submit" value="Fechar {{ concursoAtivo }}"  >
      {% csrf_token %}
 </form>

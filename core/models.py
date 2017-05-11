@@ -36,19 +36,19 @@ class Sorteio(models.Model):
 
     activo=models.BooleanField(default=False)
 
-    premio1 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
-    premio2 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
-    premio3 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
-    premio4 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
-    premio5 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
-    premio6 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
-    premio7 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
-    premio8 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
-    premio9 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
-    premio10 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
-    premio11 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
-    premio12 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
-    premio13 = models.DecimalField(default=0, max_digits=9, decimal_places=2)
+    premio1 = models.DecimalField(default=0, max_digits=12, decimal_places=2)
+    premio2 = models.DecimalField(default=0, max_digits=12, decimal_places=2)
+    premio3 = models.DecimalField(default=0, max_digits=12, decimal_places=2)
+    premio4 = models.DecimalField(default=0, max_digits=12, decimal_places=2)
+    premio5 = models.DecimalField(default=0, max_digits=12, decimal_places=2)
+    premio6 = models.DecimalField(default=0, max_digits=12, decimal_places=2)
+    premio7 = models.DecimalField(default=0, max_digits=12, decimal_places=2)
+    premio8 = models.DecimalField(default=0, max_digits=12, decimal_places=2)
+    premio9 = models.DecimalField(default=0, max_digits=12, decimal_places=2)
+    premio10 = models.DecimalField(default=0, max_digits=12, decimal_places=2)
+    premio11 = models.DecimalField(default=0, max_digits=12, decimal_places=2)
+    premio12 = models.DecimalField(default=0, max_digits=12, decimal_places=2)
+    premio13 = models.DecimalField(default=0, max_digits=12, decimal_places=2)
 
     def __str__(self):
         return self.nSorteio
