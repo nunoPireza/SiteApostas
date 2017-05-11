@@ -249,7 +249,10 @@ def editRegisto(request):
 
 @login_required
 def criarInfoBanc(request):
-    return render(request, 'core/infoBanc.html')
+    if Conta.objects.filter(user_id=request.user.id).exists():
+        return render(request, 'core/editardados.html')
+    else:
+        return render(request, 'core/infoBanc.html')
 
 def criarInfoB(request):
     usr = request.user.id
@@ -686,7 +689,7 @@ def carregaF(request):
         n = s[0]
         data = s[1]
         data = datetime.strptime(data, '%d/%m/%Y')
-        #premioV = s[2]
+        premioV = s[2]
         bolas = [int(i) for i in s[2:7]]
         estrelas = [int(i) for i in s[7:9]]
         premios=[Decimal(i)for i in s[9:23]]
