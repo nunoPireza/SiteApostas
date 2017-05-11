@@ -48,9 +48,9 @@ def homepage(request):
 
 @login_required
 def areacomum(request):
-    ultimoSorteio = Sorteio.objects.values('nSorteio').filter(activo=False)
-    apostasporsorteio = Aposta.objects.values('nConta_id').filter(nSorteio_id=ultimoSorteio)
-    context = {'ultimoSorteio': ultimoSorteio, 'apostasporsorteio': apostasporsorteio}  # dicionário de contexto
+    ultimoSorteio = Sorteio.objects.all().filter(activo=False)
+    apostasporsorteio = Aposta.objects.all().filter(nSorteio_id=ultimoSorteio).count()
+    context = {'ultimoSorteio': ultimoSorteio, 'apostasporsorteio':apostasporsorteio}  # dicionário de contexto
     return render(request, 'core/areacomum.html', context)
 
 @login_required
@@ -219,9 +219,13 @@ def editRegisto(request):
             if request.POST['semail']:
                 request.user.email = request.POST['semail']
                 request.user.save()
-            if request.POST['snif']:
+
+            nif_str = len(str(request.POST['snif']))
+            if request.POST['snif'] and int(nif_str)==9:
                 usr.NIF = request.POST['snif']
-            if request.POST['scontacto']:
+
+            contact_str = len(str(request.POST['scontacto']))
+            if request.POST['scontacto'] and int(contact_str) == 9:
                 usr.contacto = request.POST['scontacto']
             if request.POST['smorada']:
                 usr.morada = request.POST['smorada']
@@ -255,6 +259,12 @@ def criarInfoBanc(request):
         return render(request, 'core/infoBanc.html')
 
 def criarInfoB(request):
+    context = {}
+    iban = len(str(request.POST['input_iban']))
+    if int(iban) != 10:
+        context['correct_iban'] = True
+        return render(request, 'core/infoBanc.html', context)
+
     usr = request.user.id
     cnt = Conta(IBAN=request.POST['input_iban'], saldo=0.0, premios=0.0, user_id=usr)
     cnt.save()
@@ -840,9 +850,9 @@ def submeterApostas(request): #grava ficheiro CSV para registar na SantaCasa
 
     return response
 
-def distribuipremio():
-    #premioMax = Sorteio.objects.values('premio').get(activo=False).order_by('nSorteio').last()
-    premioMax = 200000
+'''def distribuipremio:
+    premioMax = Sorteio.objects.values('premio').get(activo=False).order_by('nSorteio').last()
+    #premioMax = 200000
     sorteioAtual = Sorteio.objects.values('nSorteio').get(activo=False).order_by('nSorteio').last()
     sorteioAtual = sorteioAtual['nSorteio']
 
@@ -885,12 +895,9 @@ def distribuipremio():
         listaestrelasAposta.append(contaId.estrela1)
         listaestrelasAposta.append(contaId.estrela2)
 
-
         #averiguar premios por contaId
         listaPremios = []
         for linha in chavesjogadas:
             for i in range(4):
-                if linha['listaBolasAposta'][i] == listabolaspremio[i]:
-                    naofaznada=0
-
+                if linha['listaBolasAposta'][i] == listabolaspremio[i]:'''
 

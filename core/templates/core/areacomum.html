@@ -50,14 +50,15 @@
             {% if ultimoSorteio %}
                 <ul>
                     {% for sorteio in ultimoSorteio %}
-                      <p>  Sorteio Numero : {{ sorteio.nSorteio }}  Premio : {{ sorteio.premio }}  N de Apostas {{ apostasporsorteio.values }}
+
+                      <p>  Sorteio Numero : {{ sorteio.nSorteio }}  Premio : {{ sorteio.premio1 }} Número de Apostas : {{ apostasporsorteio }}
                     {% endfor %}
                 </ul>
             {% else %}
                 <p>Nao ha Sorteios disponiveis.</p>
             {% endif %}
 
-<h1>Aqui ficam imagens publicidade!!!</h1>
+
         </div>
         <script src="{% static 'js/jquery.js'%}"></script>
 
