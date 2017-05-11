@@ -22,6 +22,15 @@
       <button>Entrar</button>
       <p class="message">Novo na página? <a href="{% url 'core:registo' %}">Regista-te</a></p>
     </form>
+
+    {% if messages %}
+        <ul class='messages'>
+        {% for message in messages %}
+            <div class="{{ message.tags }}">{{ message }}</div>
+		{% endfor %}
+		</ul>
+	{% endif %}
+
     {% if form.errors %}
         <p style="color: red">O username e a password não foram encontradas. Tenta outra vez.</p>
     {% endif %}

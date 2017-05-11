@@ -108,7 +108,7 @@ def novoRegisto(request):
     send_mail(titulo, mensagem, settings.EMAIL_HOST_USER, [emaildestino,settings.EMAIL_HOST_USER], fail_silently=True)
     return render(request, 'core/homepage.html')
 
-@login_required
+
 def registo(request):
     return render(request, 'core/registo.html')
 
@@ -120,18 +120,12 @@ def loginview(request):
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(username=username, password=password)
-
-    context = {}
     if user is not None:
         login(request, user)
-        args = {}
-        for each in User._meta.fields:
-            args[each.name] = getattr(User, each.name)
-        return render(request, 'core/areacomum.html', args)
-
+        return render(request, 'core/areacomum.html')
     else:
-        context['noUser'] = True
-        return render(request, "core/loginpage.html", context)
+        messages.warning(request, 'Os dados introduzidos estão incorretos')
+        return render(request, "core/loginpage.html")
 
 @login_required
 def logoutview(request):

@@ -10,7 +10,7 @@
 </head>
 <body>
 <div class="container">
-    {% if user.conta.IBAN != None %}
+    {% if user.conta.IBAN == None %}
         <p>Já tem IBAN {{ user.conta.IBAN }} associado à sua conta, caso pretenda alterar por favor tente
         <a href="{% url 'core:editardados'%}">Atualizar Dados Conta</a></p>
     {% else %}

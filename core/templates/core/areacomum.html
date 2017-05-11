@@ -40,8 +40,8 @@
 
 <h1>Bem vindo ao site de Apostas, Está na área comum</h1>
 
-<li><a href="{% url 'core:areapessoal' %}"> ir para areapessoal</a></li>
-<li><a href="{% url 'core:apostar' %}"> apostar</a></li>
+
+<a href="{% url 'core:apostar' %}">Faça a sua Aposta</a>
  {%  if user.is_superuser %}
     <li><a href="{% url 'core:admin' %}"> Administradores</a></li>
  {% endif %}
