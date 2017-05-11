@@ -56,6 +56,12 @@ def areacomum(request):
     return render(request, 'core/areacomum.html', context)
 
 @login_required
+def areapessoal(request):
+    apostasuser = Aposta.objects.all().filter(nConta_id=request.user.id)
+    context = {'apostasuser': apostasuser}
+    return render(request, 'core/areapessoal.html',context)
+
+@login_required
 def admin(request):
     context = {}
     if User.is_superuser:
@@ -173,9 +179,6 @@ def submeterpass(request):
 def apostar(request):
     return render(request, 'core/apostar.html')
 '''
-@login_required
-def areapessoal(request):
-    return render(request, 'core/areapessoal.html')
 
 @login_required
 def mostrardados(request):

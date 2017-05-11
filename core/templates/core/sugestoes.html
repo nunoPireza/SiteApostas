@@ -1,8 +1,6 @@
 {% load static %}
 
-<!-- <a>" lista </a>
-{% load extrafiltro %}
--->
+
 <link rel="stylesheet" type="text/css" href="{% static 'css/sugestoes.css'%}">
 
 <p> DADOS DAS SUGESTOES </p>
@@ -72,7 +70,7 @@
          {% if data5 %}
 
                 <table id='bolasD' style="width:30%">
-                    <th onclick="sortTable(0,'bolasD')"> ocorreu em:</th>
+                    <th onclick="sortTable(0,'bolasD')"> Combinação Bolas ocorreu em:</th>
                     {% for d in data5 %}
                         <tr>
                             <td>{{ d }}</td>
@@ -113,7 +111,7 @@
 
                 <table id='estrelasD' style="float: left">
                     <tr>
-                        <th onclick="sortTable(0,'estrelasD')"> ocorreu em:</th>
+                        <th onclick="sortTable(0,'estrelasD')">Combinação Estrelas ocorreu em:</th>
                     </tr>
                     {% for d in data2 %}
                         <tr>
